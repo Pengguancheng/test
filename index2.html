@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CrazyBee</title>
+
+  <link href="CBee.css" rel="stylesheet" type="text/css">  <!--嵌入css檔-->
+
+  <link rel="stylesheet" href="jquery-mobile/themecolor.min.css" />  <!--顏色-->
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+  <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+  <link rel="stylesheet" href="http://www.w3schools.com/lib/w3-theme-blue-grey.css">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+  <style>
+    html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+  </style>
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script type="text/javascript" charset="utf-8" src="CBee.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiG3BFD_cc5barjH-4QchDE92ByomuAIY"></script>
+  <script type="text/javascript" charset="utf-8">
+    var pictureSource;
+    var destinationType;
+    document.addEventListener("deviceready",onDeviceReady,false);
+    //window.onload = loadScript;
+  </script>
+
+</head>
+<body>
+<!--首頁-->
+<div data-role="page" id="home">
+	<div data-role="panel" id="myPanel">
+		<h2>側拉視窗</h2>
+		<p>動態</p>
+        <p>個人</p>
+		<p>連結</p>
+		<a href="#home" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-delete-black ui-btn-icon-left">關閉</a>
+	  </div>
+  <div data-role="header">
+	<a href="#myPanel" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">|||</a>
+    <h1>一窩瘋</h1>
+  </div>
+  <div align="center" data-role="content" id="map-canvas"style="width:100vw; height:100vh;">
+    <h1>一窩瘋</h1>
+  </div>>
+  <div data-id="main" data-position="fixed" data-role="footer">
+    <div data-iconpos="top" data-role="navbar">
+      <ul>
+        <li><a href="#home" class="ui-btn-active ui-state-persist" id="homemap" data-icon="custom">地圖</a></li>
+        <li><a href="#photo" id="camera" data-icon="custom">拍照</a></li>
+        <li><a href="#news" id="newsfeed" data-icon="custom">動態時報</a></li>
+        <li><a href="#personal" id="profile" data-icon="custom">個人檔案</a></li> 		
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--相機頁面-->
+<div data-role="page" id="photo">
+  <div data-role="header">
+    <h1>一窩瘋</h1>
+  </div>
+  <div data-role="content">內容
+    <button onclick="fblogin()">Capture Photo</button> <br>
+    <button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+    <button onclick="upload_win()">upload</button><br>
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+  </div>
+  <div data-id="main" data-position="fixed" data-role="footer">
+    <div data-iconpos="top" data-role="navbar">
+      <ul>
+        <li><a href="#home" id="homemap1" data-icon="custom">地圖</a></li>
+        <li><a href="#photo" class="ui-btn-active ui-state-persist" id="camera1" data-icon="custom">拍照</a></li>
+        <li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
+        <li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--動態時報-->
+<div data-role="page" id="news">
+  <div data-role="header" data-position="fixed">
+    <h1>一窩瘋</h1>
+  </div>
+  <!-- Navbar -->
+<!--<div class="w3-top">
+ <ul class="w3-navbar w3-theme-d2 w3-left-align w3-large">
+  <li class="w3-hide-medium w3-hide-large w3-opennav w3-right">
+    <a class="w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  </li>
+  <li><a href="#" class="w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Logo</a></li>
+  <li class="w3-hide-small"><a href="#" class="w3-padding-large w3-hover-white" title="News"><i class="fa fa-globe"></i></a></li>
+  <li class="w3-hide-small"><a href="#" class="w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a></li>
+  <li class="w3-hide-small"><a href="#" class="w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a></li>
+  <li class="w3-hide-small w3-dropdown-hover">
+    <a href="#" class="w3-padding-large w3-hover-white" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">3</span></a>
+    <div class="w3-dropdown-content w3-white w3-card-4">
+      <a href="#">One new friend request</a>
+      <a href="#">John Doe posted on your wall</a>
+      <a href="#">Jane likes your post</a>
+    </div>
+  </li>
+  <li class="w3-hide-small w3-right"><a href="#" class="w3-padding-large w3-hover-white" title="My Account"><img src="img_avatar2.png" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></a></li>
+ </ul>
+</div>-->
+
+<!-- Navbar on small screens -->
+<!--<div id="navDemo" class="w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:51px">
+  <ul class="w3-navbar w3-left-align w3-large w3-theme">
+    <li><a class="w3-padding-large" href="#">Link 1</a></li>
+    <li><a class="w3-padding-large" href="#">Link 2</a></li>
+    <li><a class="w3-padding-large" href="#">Link 3</a></li>
+    <li><a class="w3-padding-large" href="#">My Profile</a></li>
+  </ul>
+</div>-->
+
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <!--<div class="w3-card-2 w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">post</h4>
+         <p class="w3-center"><img src="img_avatar3.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+         <hr>
+         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> Designer, UI</p>
+         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> London, UK</p>
+         <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> April 1, 1988</p>
+        </div>
+      </div>
+      <br>-->
+      
+      <!-- Accordion -->
+      <!--<div class="w3-card-2 w3-round">
+        <div class="w3-accordion w3-white">
+          <button onclick="myFunction('Demo1')" class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups</button>
+          <div id="Demo1" class="w3-accordion-content w3-container">
+            <p>Some text..</p>
+          </div>
+          <button onclick="myFunction('Demo2')" class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> My Events</button>
+          <div id="Demo2" class="w3-accordion-content w3-container">
+            <p>Some other text..</p>
+          </div>
+          <button onclick="myFunction('Demo3')" class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Photos</button>
+          <div id="Demo3" class="w3-accordion-content w3-container">
+         <div class="w3-row-padding">
+         <br>
+           <div class="w3-half">
+             <img src="img_lights.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="img_nature.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="img_mountains.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="img_forest.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="img_nature.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+           <div class="w3-half">
+             <img src="img_fjords.jpg" style="width:100%" class="w3-margin-bottom">
+           </div>
+         </div>
+          </div>
+        </div>
+      </div>
+      <br>-->
+      
+      <!-- Interests -->
+      <div class="w3-card-2 w3-round w3-white w3-hide-small">
+        <div class="w3-container">
+          <p>Interests</p>
+          <p>
+            <span class="w3-tag w3-small w3-theme-d5">News</span>
+            <span class="w3-tag w3-small w3-theme-d4">W3Schools</span>
+            <span class="w3-tag w3-small w3-theme-d3">Labels</span>
+            <span class="w3-tag w3-small w3-theme-d2">Games</span>
+            <span class="w3-tag w3-small w3-theme-d1">Friends</span>
+            <span class="w3-tag w3-small w3-theme">Games</span>
+            <span class="w3-tag w3-small w3-theme-l1">Friends</span>
+            <span class="w3-tag w3-small w3-theme-l2">Food</span>
+            <span class="w3-tag w3-small w3-theme-l3">Design</span>
+            <span class="w3-tag w3-small w3-theme-l4">Art</span>
+            <span class="w3-tag w3-small w3-theme-l5">Photos</span>
+          </p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- Alert Box -->
+      <div class="w3-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+        <span onClick="this.parentElement.style.display='none'" class="w3-hover-text-grey w3-closebtn">
+          <i class="fa fa-remove"></i>
+        </span>
+        <p><strong>Hey!</strong></p>
+        <p>People are looking at your profile. Find out who.</p>
+      </div>
+    
+    <!-- End Left Column -->
+    </div>
+    
+    <!-- Middle Column -->
+    <div class="w3-col m7">
+    
+      <div class="w3-row-padding">
+        <div class="w3-col m12">
+          <div class="w3-card-2 w3-round w3-white">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Social Media template by w3.css</h6>
+              <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
+              <button type="button" class="w3-btn w3-theme"><i class="fa fa-pencil"></i>  Post</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="img_avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+        <span class="w3-right w3-opacity">1 min</span>
+        <h4>John Doe</h4><br>
+        <hr class="w3-clear">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <div class="w3-row-padding" style="margin:0 -16px">
+            <div class="w3-half">
+              <img src="img_lights.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
+            </div>
+            <div class="w3-half">
+              <img src="img_nature.jpg" style="width:100%" alt="Nature" class="w3-margin-bottom">
+          </div>
+        </div>
+        <button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+        <button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+      </div>
+      
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="img_avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+        <span class="w3-right w3-opacity">16 min</span>
+        <h4>Jane Doe</h4><br>
+        <hr class="w3-clear">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+        <button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+      </div>
+
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="img_avatar6.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+        <span class="w3-right w3-opacity">32 min</span>
+        <h4>Angie Jane</h4><br>
+        <hr class="w3-clear">
+        <p>Have you seen this?</p>
+        <img src="img_nature.jpg" style="width:100%" class="w3-margin-bottom">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+        <button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+      </div>
+      
+    <!-- End Middle Column -->
+    </div>
+    
+    <!-- Right Column -->
+    <div class="w3-col m2">
+      <div class="w3-card-2 w3-round w3-white w3-center">
+        <div class="w3-container">
+          <p>Upcoming Events:</p>
+          <img src="img_forest.jpg" alt="Forest" style="width:100%;">
+          <p><strong>Holiday</strong></p>
+          <p>Friday 15:00</p>
+          <p><button class="w3-btn w3-btn-block w3-theme-l4">Info</button></p>
+        </div>
+      </div>
+      <br>
+      
+      <div class="w3-card-2 w3-round w3-white w3-center">
+        <div class="w3-container">
+          <p>Friend Request</p>
+          <img src="img_avatar6.png" alt="Avatar" style="width:50%"><br>
+          <span>Jane Doe</span>
+          <div class="w3-row w3-opacity">
+            <div class="w3-half">
+              <button class="w3-btn w3-green w3-btn-block w3-section" title="Accept"><i class="fa fa-check"></i></button>
+            </div>
+            <div class="w3-half">
+              <button class="w3-btn w3-red w3-btn-block w3-section" title="Decline"><i class="fa fa-remove"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      
+      <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
+        <p>ADS</p>
+      </div>
+      <br>
+      
+      <div class="w3-card-2 w3-round w3-white w3-padding-32 w3-center">
+        <p><i class="fa fa-bug w3-xxlarge"></i></p>
+      </div>
+      
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+<!-- End Page Container -->
+</div>
+<br>
+
+<!-- Footer -->
+<!--<footer class="w3-container w3-theme-d3 w3-padding-16">
+  <h5>Footer</h5>
+</footer>
+
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="http://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>-->
+ 
+<script>
+// Accordion
+function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-theme-d1";
+    } else {
+        x.className = x.className.replace("w3-show", "");
+        x.previousElementSibling.className =
+        x.previousElementSibling.className.replace(" w3-theme-d1", "");
+    }
+}
+
+// Used to toggle the menu on smaller screens when clicking on the menu button
+function openNav() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+</script>
+  <div data-id="main" data-position="fixed" data-role="footer">
+    <div data-iconpos="top" data-role="navbar">
+      <ul>
+        <li><a href="#home" id="homemap2" data-icon="custom">地圖</a></li>
+        <li><a href="#photo" id="camera2" data-icon="custom">拍照</a></li>
+        <li><a href="#news" class="ui-btn-active ui-state-persist" id="newsfeed2" data-icon="custom">動態時報</a></li>
+        <li><a href="#personal" id="profile2" data-icon="custom">個人檔案</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--個人檔案-->
+<div data-role="page" id="personal">
+  <div data-role="header">
+    <h1>一窩瘋</h1>
+  </div>
+  <div data-role="content" align="center">
+  	<img src="jquery-mobile/images/boy.png" style="width:65px;" class="w3-circle w3-left w3-margin w3-hide-large w3-hover-opacity">  <!--大頭照-->
+    <p>David</p>   <!--姓名-->
+  	<div class="abgne_tab" >
+		<ul class="tabs">
+			<li><a href="#tab1">我的相簿</a></li>
+			<li><a href="#tab2">我的路線</a></li>
+		</ul>
+ 
+		<div class="tab_container">
+			<div id="tab1" class="tab_content">
+                <div class="w3-row-padding w3-margin-top">    <!--相簿-->
+                
+                <div class="w3-third">
+                <div class="w3-card-2">
+                <img src="img_5terre.jpg" style="width:100%">
+                <div class="w3-container">
+                <h4>高雄一日遊</h4>
+                </div>
+                </div>
+                </div>
+                
+                <div class="w3-third">
+                <div class="w3-card-2">
+                	<img src="img_manarola.jpg" style="width:100%">
+                <div class="w3-container">
+                <h4>台南趴趴走</h4>
+                </div>
+                </div>
+                </div>     <!--相簿-->
+                
+                </div>
+			</div>
+			<div id="tab2" class="tab_content">
+				<h3>我的路線</h3>
+				<p>這個頁籤就是來放使用者新增的路線</p>
+			</div>
+		</div>
+	</div>
+    <script>
+			$(function(){
+		// 預設顯示第一個 Tab
+		var _showTab = 0;
+		var $defaultLi = $('ul.tabs li').eq(_showTab).addClass('active');
+		$($defaultLi.find('a').attr('href')).siblings().hide();
+	 
+		// 當 li 頁籤被點擊時...
+		// 若要改成滑鼠移到 li 頁籤就切換時, 把 click 改成 mouseover
+		$('ul.tabs li').click(function() {
+			// 找出 li 中的超連結 href(#id)
+			var $this = $(this),
+				_clickTab = $this.find('a').attr('href');
+			// 把目前點擊到的 li 頁籤加上 .active
+			// 並把兄弟元素中有 .active 的都移除 class
+			$this.addClass('active').siblings('.active').removeClass('active');
+			// 淡入相對應的內容並隱藏兄弟元素
+			$(_clickTab).stop(false, true).fadeIn().siblings().hide();
+	 
+			return false;
+		}).find('a').focus(function(){
+			this.blur();
+		});
+	});
+	</script>
+  </div>
+  <div data-id="main" data-position="fixed" data-role="footer">
+    <div data-iconpos="top" data-role="navbar">
+      <ul>
+        <li><a href="#home" id="homemap3" data-icon="custom">地圖</a></li>
+        <li><a href="#photo" id="camera3" data-icon="custom">拍照</a></li>
+        <li><a href="#news" id="newsfeed3" data-icon="custom">動態時報</a></li>
+        <li><a href="#personal" class="ui-btn-active ui-state-persist" id="profile3" data-icon="custom">個人檔案</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--景點簡介-->
+<div id="Attractions" data-add-back-btn="true" data-back-btn-text="返回" data-back-btn-theme="c" data-role="page">
+  <div data-role="header">
+    <table><tr>
+      <td  onclick="$.mobile.changePage('#home');">返回</td><td><td>
+    <h1 id="titlename" data-position="fixed" align="center">景點名稱</h1></td><td style="right:0;">
+    <p id="changer" onclick="$.mobile.changePage('#route');goroute();">路線</p>
+    </td>
+    </tr>
+    </table>
+  </div>
+  <div align="center" data-role="content">
+    <div id="div-photo"><img name="slideshow" width="240" height="144" id="slideshow" style="width:100%;min-height:350px;max-height:600px;"></div>
+    <br>
+    <div id="div-info" data-theme="m" align="center">
+      <table style="text-align:center;">
+        <thead>
+        <tr class="w3-light-grey">
+          <th colspan="2">景點資訊</th>
+        </tr>
+        </thead>
+        <tr>
+          <td>地址</td>
+          <td id="addr">Smith</td>
+        </tr>
+        <tr>
+          <td >電話</td>
+          <td id="phone">Jackson</td>
+        </tr>
+        <tr>
+          <td >營業時間</td>
+          <td id="time">Jackson</td>
+        </tr>
+        <tr>
+          <td id="attraction" colspan="2">這裡放景點簡介</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<!--排行榜-->
+<div id="rank" data-add-back-btn="true" data-back-btn-text="返回" data-back-btn-theme="c" data-role="page">
+  <div data-role="header">
+    <h1 data-position="fixed" >排行榜</h1>
+  </div>
+  <div align="center" data-role="content">內容</div>
+</div>
+
+<!--路線頁面-->
+<div data-role="page" id="route">
+  <div data-role="header">
+    <table><tr>
+      <td  onclick="$.mobile.changePage('#Attractions');">返回</td><td>
+    <h1 align="center">路線</h1></td><td style="right:0;">
+      </tr>
+    </table>
+  </div>
+    <div data-role="content" style=" background-color:#F9F9D9; padding:5px;">
+      <table width="100%" align="center">
+        <tr>
+          <td height="25" align="center" valign="center" style="font-size:16px; ;">路線選擇</td>
+        </tr>
+        <tr>
+          <td height="20" align="center" valign="center" style="font-size:12px;;">嘉義市 嘉義大學新民校區</td>
+        </tr>
+      </table>
+    </div>
+  <div id="showBlock"></div>
+
+</div>
+</body>
+</html>

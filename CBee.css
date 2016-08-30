@@ -1,0 +1,139 @@
+/*設定footer的icon*/
+#homemap .ui-icon{
+	width:30px;
+	height:30px;
+	box-shadow:none;
+	background: url(jquery-mobile/images/planet-earth.png) 50% 50% no-repeat;
+	background-size: 24px 24px;
+}
+#camera .ui-icon{
+	width:30px;
+	height:30px;
+	box-shadow:none;
+	background: url(jquery-mobile/images/photo-camera.png) 50% 50% no-repeat;
+	background-size: 24px 24px;
+}
+#newsfeed .ui-icon{
+	width:30px;
+	height:30px;
+	box-shadow:none;
+	background: url(jquery-mobile/images/icon.png) 50% 50% no-repeat;
+	background-size: 24px 18px;
+}
+#profile .ui-icon{
+	width:30px;
+	height:30px;
+	box-shadow:none;
+	background: url(jquery-mobile/images/profile.png) 50% 50% no-repeat;
+	background-size: 25px 25px;
+}
+
+/*設定主頁地圖位置*/
+#imgmap{
+	position:relative;
+	top:40%;
+	left:-5%;
+}
+.mapbox{
+	position:relative;
+	width:100%;
+	height:100%;
+	bottom:0;
+}
+.image1{
+			position:absolute;
+			z-index:1;
+}
+
+.image2{
+			position:absolute;
+			top:82%;
+			left:6%;
+			width:56px;
+			height:60px;
+			z-index:2;
+}
+/*個人檔案頁籤*/
+ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.abgne_tab {
+	clear: left;
+	width: 400px;
+	margin: 10px 0;
+}
+ul.tabs {
+	width: 100%;
+	height: 32px;
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+}
+ul.tabs li {
+	float: left;
+	height: 31px;
+	line-height: 31px;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: -1px;	/* 讓 li 往下移來遮住 ul 的部份 border-bottom */
+	border: 1px solid #999;
+	border-left: none;
+	background: #e1e1e1;
+}
+ul.tabs li a {
+	display: block;
+	padding: 0 20px;
+	color: #000;
+	border: 1px solid #fff;
+	text-decoration: none;
+}
+ul.tabs li a:hover {
+	background: #ccc;
+}
+ul.tabs li.active  {
+	background: #fff;
+	border-bottom: 1px solid#fff;
+}
+ul.tabs li.active a:hover {
+	background: #fff;
+}
+div.tab_container {
+	clear: left;
+	width: 100%;
+	border: 1px solid #999;
+	border-top: none;
+	background: #fff;
+}
+div.tab_container .tab_content {
+	padding: 20px;
+}
+div.tab_container .tab_content h2 {
+	margin: 0 0 20px;
+}
+/*設定動態時報card*/
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 95%;
+    border-radius: 5px;
+	background-color:white;
+	
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+span{
+	position:relative;
+	color:#99BBFF;
+	right:5px;
+}
+
+.container {
+    padding: 2px 16px;
+}
+
+
+
