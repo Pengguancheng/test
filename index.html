@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,4 +112,109 @@
   <!--下面的buttum,-->
 
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>crazybee</title>
+	
+	<!--<link href="CBee.css" rel="stylesheet" type="text/css">  <!--嵌入css檔-->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="stylesheet" href="jquery-mobile/themecolor.css" />
+	<!--拖拉用	-->
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+	<link rel="stylesheet" href="CBee.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+	<style>
+		#sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+		#sortable li { margin:auto; padding: 0.3em;font-size: 1.4em; height: 25px;text-align:center; }
+		.ui-sortable {
+					  width: 100%;
+					  margin: 50px auto;
+					  background-color: #ccc;
+					  -webkit-box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, .1);
+					  box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, .1);
+					  list-style-type: none; 
+					  padding: 0; 
+					}
+	</style>
+	<script>
+		$( function() {
+		$( "#sortable" ).sortable();
+		$( "#sortable" ).disableSelection();
+		} );
+	function addattraction(){
+	var sortedIDs = $("#sortable").sortable("toArray");
+	var txt = "<li data-role='listview' class='ui-state-default ui-li-static ui-body-inherit ui-sortable-handle' id="+(sortedIDs.length)+">"+$("#add").val()+"</li>";
+	$("#sortable").append(txt);
+	$( "#sortable" ).sortable( "refresh" );
+	$("#add").val(" ");
+	}
+	 $.ajax({
+        url: "http://127.0.0.1/fbsdk/routename.php",
+        type:"GET",
+        dataType:'json',
+        success: function(data){
+            console.log(data);
+				$( function() {
+				$( "#add" ).autocomplete({
+						source: data
+					});
+				  });
+        },
+        error: function(jqXHR) {
+            alert("發生錯誤: " + jqXHR.status);
+        },
+    })
+	var session ;
+	function uploadroute(){
+		var sortedIDs = $("#sortable").sortable("toArray");
+		session = {'data': [ ] , 'num':sortedIDs.length};
+		var num = sortedIDs.length;
+		for( i=0 ; i<num ; i++ ){
+			session.data.push({'name':$("#"+sortedIDs[i]).text()});
+		}
+		var tmp=JSON.stringify(session);
+		console.log(session);
+		$.ajax({
+        url: "http://127.0.0.1/fbsdk/routein.php",
+        type:"POST",
+        dataType:'text',
+		data:{data:tmp},
+        success: function(data){
+			console.log(data);
+        },
+        error: function(jqXHR) {
+            alert("發生錯誤: " + jqXHR.status);
+        },
+    })
+	}
+	</script>
+</head>
+<body>
+	<div data-role="page" id="routeadd">
+		<input type="text" id="add" />
+		<button class="ui-btn" onclick="addattraction()" >新增景點</button>
+			<ul id="sortable" data-role="listview" >
+			</ul>
+	</div>>
+  <!--下面的buttum,-->
+  <div style="position: fixed;  bottom: 3px; width: 100%">
+	<table  width="100%" align="center">
+ 
+		<tr>
+			<td height="20" align="center" valign="center" style="font-size:12px;">
+			<input type="button" id="btnclear" value="清除" ></td>
+			<td height="20" align="center" valign="center" style="font-size:12px;">
+			<input type="button" id="btndone" value="完成" ></td>
+		</tr>
+	</table>
+  </div>
+</body>
+>>>>>>> origin/master
 </html>
