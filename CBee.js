@@ -26,9 +26,10 @@ function onDeviceReady() {
     //fblogin();
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
-    map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-    map.setOptions({styles: stylesArray});
-    $.mobile.changePage('#home');
+//    map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+//    map.setOptions({styles: stylesArray});
+//    $.mobile.changePage('#home');
+    $.mobile.changePage('#photo');
 }
 function initialize() {
     var mapOptions = {
@@ -46,7 +47,7 @@ function initialize() {
 function setmap(a,b) {
          $.mobile.changePage('#map');
          map.setCenter(new google.maps.LatLng(a,b));
-         map.setZoom(11);
+         map.setZoom(9);
 };
 function loadScript() {
     var script = document.createElement("script");
@@ -56,7 +57,7 @@ function loadScript() {
 
 function onPhotoDataSuccess(imageData) {
 
-    var smallImage = document.getElementById('smallImage');
+    var smallImage = document.getElementById('photoimg');
 
     smallImage.style.display = 'block';
 

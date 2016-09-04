@@ -1,220 +1,464 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>crazybee</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>CrazyBee</title>
 	
-	<!--<link href="CBee.css" rel="stylesheet" type="text/css">  <!--嵌入css檔-->
+    <link href="CBee.css" rel="stylesheet" type="text/css">  <!--嵌入css檔-->
+	
+	<link rel="stylesheet" href="jquery-mobile/themecolor.css" />  <!--顏色-->
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-	<link rel="stylesheet" href="jquery-mobile/themecolor.css" />
-	<!--拖拉用	-->
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-	<link rel="stylesheet" href="CBee.css" />
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-	<style>
-		#sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-		#sortable li { margin:auto; padding: 0.3em;font-size: 1.4em; height: 25px;text-align:center; }
-		.ui-sortable {
-					  width: 100%;
-					  margin: 50px auto;
-					  background-color: #ccc;
-					  -webkit-box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, .1);
-					  box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, .1);
-					  list-style-type: none; 
-					  padding: 0; 
-					}
-	</style>
+	
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+	
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="CBee.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiG3BFD_cc5barjH-4QchDE92ByomuAIY"></script>
+    <script type="text/javascript" charset="utf-8">
+      var pictureSource;
+      var destinationType;
+      document.addEventListener("deviceready",onDeviceReady,false);
+    </script>
+	<!--返回-->
 	<script>
-		$( function() {
-		$( "#sortable" ).sortable();
-		$( "#sortable" ).disableSelection();
-		} );
-	function removeli(i){
-		$("#"+i).remove();
-	}	
-	function addattraction(){
-	var sortedIDs = $("#sortable").sortable("toArray");
-	var txt = "<li data-role='listview' class='ui-state-default ui-li-static ui-body-inherit ui-sortable-handle' onclick='removeli("+(sortedIDs.length)+")' id="+(sortedIDs.length)+">"+$("#add").val()+"</li>";
-	$("#sortable").append(txt);
-	$( "#sortable" ).sortable( "refresh" );
-	$("#add").val("");
-	}
-	 $.ajax({
-        url: "http://127.0.0.1/fbsdk/routename.php",
-        type:"GET",
-        dataType:'json',
-        success: function(data){
-            console.log(data);
-				$( function() {
-				$( "#add" ).autocomplete({
-						source: data
-					});
-				  });
-        },
-        error: function(jqXHR) {
-            alert("發生錯誤: " + jqXHR.status);
-        },
-    })
-	var session ;
-	var getdata;
-	function uploadroute(){
-		var sortedIDs = $("#sortable").sortable("toArray");
-		session = {'data': [ ] , 'num':sortedIDs.length , 'routename':$("#routename").val()};
-		var num = sortedIDs.length;
-		for( i=0 ; i<num ; i++ ){
-			session.data.push({'name':$("#"+sortedIDs[i]).text()});
+		function goBack() {
+			window.history.back();
 		}
-		var tmp=JSON.stringify(session);
-		console.log(session);
-		$.ajax({
-        url: "http://127.0.0.1/fbsdk/routein.php",
-        type:"POST",
-        dataType:'text',
-		data:{data:tmp},
-        success: function(data){
-			console.log(data);
-			getdata = data ;
-			if(data == '0')
-				alert('景點不存在');
-			else if(data == '1')
-				alert('新增成功');
-			else if(data == '2')
-				alert('新增失敗');
-        },
-        error: function(jqXHR) {
-            alert("發生錯誤: " + jqXHR.status);
-        },
-    })
-	}
 	</script>
-</head>
-<body>
 
-<div data-role="page" id="routeadd">
+</head>
+<body style="font-family: Times New Roman, 微軟正黑體;">
+<!--地圖頁面-->
+<div data-role="page" id="map" >
 	<div data-role="header">
-		<h1>路線新增</h1>
+		<h1>一窩瘋</h1>
 	</div>
-	<label>路線名稱:</label>
-	<input type="text" id="routename" name="路線名稱"/>
-	<input type="text" id="add" />
-	<button class="ui-btn" onclick="addattraction()" >新增景點</button>
-	<ul id="sortable" data-role="listview" >
-	</ul>
-	<div data-role="footer"onclick="uploadroute()">
-		<h1>完成</h1>
+	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" >內容
 	</div>
-</div>>
-  <!--下面的buttum,-->
-
-</body>
-=======
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>crazybee</title>
-	
-	<!--<link href="CBee.css" rel="stylesheet" type="text/css">  <!--嵌入css檔-->
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
-	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-	<link rel="stylesheet" href="jquery-mobile/themecolor.css" />
-	<!--拖拉用	-->
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-	<link rel="stylesheet" href="CBee.css" />
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-	<style>
-		#sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-		#sortable li { margin:auto; padding: 0.3em;font-size: 1.4em; height: 25px;text-align:center; }
-		.ui-sortable {
-					  width: 100%;
-					  margin: 50px auto;
-					  background-color: #ccc;
-					  -webkit-box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, .1);
-					  box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, .1);
-					  list-style-type: none; 
-					  padding: 0; 
-					}
-	</style>
-	<script>
-		$( function() {
-		$( "#sortable" ).sortable();
-		$( "#sortable" ).disableSelection();
-		} );
-	function addattraction(){
-	var sortedIDs = $("#sortable").sortable("toArray");
-	var txt = "<li data-role='listview' class='ui-state-default ui-li-static ui-body-inherit ui-sortable-handle' id="+(sortedIDs.length)+">"+$("#add").val()+"</li>";
-	$("#sortable").append(txt);
-	$( "#sortable" ).sortable( "refresh" );
-	$("#add").val(" ");
-	}
-	 $.ajax({
-        url: "http://127.0.0.1/fbsdk/routename.php",
-        type:"GET",
-        dataType:'json',
-        success: function(data){
-            console.log(data);
-				$( function() {
-				$( "#add" ).autocomplete({
-						source: data
-					});
-				  });
-        },
-        error: function(jqXHR) {
-            alert("發生錯誤: " + jqXHR.status);
-        },
-    })
-	var session ;
-	function uploadroute(){
-		var sortedIDs = $("#sortable").sortable("toArray");
-		session = {'data': [ ] , 'num':sortedIDs.length};
-		var num = sortedIDs.length;
-		for( i=0 ; i<num ; i++ ){
-			session.data.push({'name':$("#"+sortedIDs[i]).text()});
-		}
-		var tmp=JSON.stringify(session);
-		console.log(session);
-		$.ajax({
-        url: "http://127.0.0.1/fbsdk/routein.php",
-        type:"POST",
-        dataType:'text',
-		data:{data:tmp},
-        success: function(data){
-			console.log(data);
-        },
-        error: function(jqXHR) {
-            alert("發生錯誤: " + jqXHR.status);
-        },
-    })
-	}
-	</script>
-</head>
-<body>
-	<div data-role="page" id="routeadd">
-		<input type="text" id="add" />
-		<button class="ui-btn" onclick="addattraction()" >新增景點</button>
-			<ul id="sortable" data-role="listview" >
+	<div data-id="main" data-position="fixed" data-role="footer">
+		<div data-iconpos="top" data-role="navbar">
+			<ul>
+				<li><a href="#home" id="homemap1" data-icon="custom">地圖</a></li>
+				<li><a href="#photo" class="ui-btn-active ui-state-persist" id="camera1" data-icon="custom">拍照</a></li>
+				<li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
+				<li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li>
 			</ul>
-	</div>>
-  <!--下面的buttum,-->
-  <div style="position: fixed;  bottom: 3px; width: 100%">
-	<table  width="100%" align="center">
- 
-		<tr>
-			<td height="20" align="center" valign="center" style="font-size:12px;">
-			<input type="button" id="btnclear" value="清除" ></td>
-			<td height="20" align="center" valign="center" style="font-size:12px;">
-			<input type="button" id="btndone" value="完成" ></td>
-		</tr>
+		</div>
+	</div>
+</div>
+<!--首頁-->
+<div data-role="page" id="home">
+	  <div data-role="panel" id="myPanel">
+		<h2>側拉視窗</h2>
+		<p>動態</p>
+        <p>個人</p>
+		<p>連結</p>
+	  </div>   <!--側拉式-->
+	  
+	  <div data-role="header" data-position="fixed">
+		<table>
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
+			<td align="center"><b><h3>Crazy Bee</h3></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li></td>
+		</table> <!--22.0440905,121.515303-->
+	  </div>               
+	  <div data-role="content">
+		<img class="image1" id="Image-Maps-Com-image-maps-2016-08-25-102025" src="http://www.image-maps.com/m/private/0/7kvmcibvpfm1l0agqd36pjln65_taiwanmap.png" border="0" width="105%" height="93%" orgWidth="1193" orgHeight="1446" usemap="#image-maps-2016-08-25-102025" alt="" />
+			<map name="image-maps-2016-08-25-102025" id="ImageMapsCom-image-maps-2016-08-25-102025">
+				<area alt="" title="台北市" onclick="setmap(25.0174715,121.36595)" shape="poly" coords="301,66,295,69,293,71,296,77,297,83,301,86,307,89,311,91,319,93,325,89,330,86,335,86,331,83,327,79,321,75,320,74,322,70,327,66,324,63,318,61,314,54,309,53,302,52,300,52,295,53" style="outline:none;" target="_self" />
+				
+				<area  alt="" title="新北市" onclick="setmap(24.9867782,121.3638857)" shape="poly" coords="293,56,288,60,286,65,283,70,276,73,267,77,277,81,281,84,280,88,273,91,272,98,275,105,278,110,284,109,287,119,292,126,297,129,305,126,314,119,320,114,327,111,337,103,342,98,350,93,359,91,363,90,370,91,370,87,365,84,361,81,357,79,353,77,349,77,342,76,340,78,343,82,342,85,337,87,334,88,331,88,329,88,323,93,319,93,309,93,307,91,301,88,297,88,296,85,295,79,292,74,294,70,297,67,299,66" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="基隆市" onclick="setmap(25.1241815,121.6468433)" shape="poly" coords="328,67,324,71,321,75,325,80,334,85,342,86,344,82,342,78,344,74,348,67,367,64,379,58,373,44,357,45,342,47,332,48,328,57" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="桃園" onclick="setmap(24.8550562,121.0917615)" shape="poly" coords="227,105,232,97,238,93,245,86,254,82,268,79,282,86,282,90,275,94,274,101,278,108,280,112,286,111,289,119,293,126,295,130,299,131,295,136,292,141,291,144,285,140,276,137,274,130,271,124,264,121,253,115,248,109,239,107" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="宜蘭" onclick="setmap(24.6493128,121.3604467)" shape="poly" coords="281,181,284,173,289,170,292,164,296,154,301,149,310,144,317,137,325,132,332,130,339,124,345,119,351,116,356,113,364,113,362,117,358,123,354,127,353,135,354,144,357,151,365,155,362,161,361,167,358,170,357,174,353,179,352,191,344,191,339,188,336,186,332,186,328,188,325,189,322,191,314,191,307,189,299,187,288,184" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="金門" onclick="setmap(24.1897103,117.5386263)" shape="poly" coords="60,145,52,145,42,148,36,156,33,162,33,167,38,172,44,174,53,175,58,174,65,167,64,157,61,152" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="馬祖" onclick="setmap(26.1565421,119.9237622)" shape="poly" coords="41,121,30,118,27,110,20,100,22,87,28,83,40,83,48,87,57,88,62,91,67,95,68,103,64,106,57,110,50,112" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="新竹市" onclick="setmap(24.7849112,120.8862645)" shape="poly" coords="207,130,194,117,183,118,161,118,144,110,149,97,165,95,182,97,194,102,200,109,206,113,213,118,224,120,227,126,223,127,218,129,213,132,212,136,209,135" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="新竹縣" onclick="setmap(24.6871971,121.0317778)" shape="poly" coords="218,138,220,134,227,130,232,129,230,122,219,119,223,115,229,111,237,112,248,115,253,122,261,125,271,127,276,134,276,142,283,145,291,150,290,157,286,160,281,168,268,169,270,165,269,161,264,158,257,154,253,150,242,148,236,143,230,141" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="苗栗" onclick="setmap(24.515109,120.8022717)" shape="poly" coords="171,183,175,176,182,172,188,162,194,157,201,152,206,143,213,149,225,152,234,158,247,161,254,166,262,171,267,177,260,183,255,189,244,193,237,197,231,195,221,195,210,195,205,192,197,192,189,195,185,192,178,188" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="花蓮" onclick="setmap(23.7343098,120.8171161)" shape="poly" coords="240,339,242,337,249,334,247,332,252,329,254,324,255,320,262,320,267,315,272,314,275,305,276,298,274,293,269,289,267,288,271,283,274,278,275,269,277,264,279,256,283,250,288,243,288,241,286,237,287,231,292,224,295,220,298,219,309,221,318,222,325,222,329,217,334,217,337,219,345,222,350,223,348,226,343,229,337,235,336,243,331,250,333,258,329,267,328,276,324,285,323,293,322,301,320,309,316,318,322,324,318,330,315,327,311,327,304,330,302,335,298,344,295,351,294,358,288,367,281,361,275,361,271,358,263,356,255,351,252,347,247,342" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="台中" onclick="setmap(24.2204718,120.6750003)" shape="poly" coords="158,216,162,211,167,205,169,197,174,189,180,195,194,200,200,199,209,197,214,200,226,200,237,200,243,202,251,197,260,195,264,189,269,185,283,183,285,188,296,190,300,191,292,197,290,204,288,210,288,219,281,219,271,216,262,210,257,210,252,214,242,223,235,223,228,222,221,225,217,225,215,231,209,235,202,237,195,237,186,231,179,228,171,228,166,224,165,219,162,218" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="南投" onclick="setmap(23.8412206,120.7016442)" shape="poly" coords="206,306,204,302,199,300,193,302,185,301,183,297,184,292,185,286,191,285,193,280,191,278,183,275,181,270,180,264,176,259,178,256,184,253,187,251,196,254,201,254,206,254,210,250,216,243,219,243,224,240,229,239,234,240,239,240,245,236,250,231,256,226,262,229,267,233,276,235,286,237,281,245,276,254,275,264,272,271,268,275,270,281,275,288,275,299,272,304,268,305,263,309,256,310,253,317,247,322,244,321,238,321,227,319,216,315,216,310,211,306" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="彰化" onclick="setmap(23.9922653,120.3297399)" shape="poly" coords="124,274,131,267,137,260,140,251,147,243,153,233,156,227,162,231,165,239,172,239,186,244,177,250,176,256,180,265,182,269,191,274,187,279,171,279,156,277,139,275,129,278" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="蘭嶼" onclick="setmap(22.0440905,121.515303)" shape="poly" coords="325,572,311,562,304,551,311,542,319,540,329,543,334,553,334,562,329,569" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="綠島" onclick="setmap(22.6563162,121.4711554)" shape="poly" coords="309,463,302,455,304,446,310,442,319,444,322,450,321,460,315,463" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="台東" onclick="setmap(22.722633,120.6083175)" shape="poly" coords="242,507,225,499,222,494,220,494,215,482,214,469,216,458,223,452,231,441,229,433,222,416,226,410,229,396,230,391,236,389,240,380,245,377,251,375,253,379,273,389,278,389,286,395,291,389,293,382,296,372,300,359,311,355,316,359,312,367,311,380,308,392,308,401,302,408,294,418,291,425,285,429,275,441,271,445,265,454,253,462,255,469,250,482,252,488,245,491,243,499" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="雲林縣" onclick="setmap(23.6738625,120.2941638)" shape="poly" coords="113,326,109,319,110,312,117,299,120,291,124,287,128,291,141,288,166,292,186,292,183,300,184,306,193,309,202,308,204,313,197,316,184,314,169,313,163,311,156,309,147,312,141,317,135,322,125,324,120,330" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="嘉義市" onclick="setmap(23.4790323,120.4141911)" shape="poly" coords="68,309,56,314,53,323,56,331,66,333,84,331,93,328,93,320,92,312,79,311" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="澎湖" onclick="setmap(23.6296692,119.4566423)" shape="poly" coords="14,354,4,348,2,338,2,324,3,310,13,298,27,290,37,296,43,308,43,319,39,333,30,343,23,350" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="嘉義縣" onclick="setmap(23.4257423,120.256671)" shape="poly" coords="109,351,111,341,112,329,118,333,123,326,134,325,147,315,160,312,165,316,189,318,201,318,205,316,212,317,215,321,215,326,228,329,218,337,207,345,200,354,189,363,183,361,176,363,171,356,172,351,169,344,159,343,152,344,146,341,140,346,134,354,127,357,117,358" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="台南" onclick="setmap(23.1508772,120.2054412)" shape="poly" coords="121,419,111,406,106,393,104,388,106,374,108,367,117,371,130,369,143,355,151,357,157,355,167,359,172,364,170,369,174,377,179,374,186,376,179,388,167,407,158,409,155,413,153,418,136,418,128,418" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="高雄" onclick="setmap(22.804199,120.3215682)" shape="poly" coords="161,482,154,478,152,472,147,466,141,461,141,455,141,448,135,440,124,429,133,427,146,428,153,427,160,420,168,418,178,404,186,389,192,381,206,374,212,367,224,358,231,352,238,354,244,353,248,355,243,360,242,363,252,369,246,372,239,381,233,385,231,393,230,405,224,410,231,425,222,425,218,428,205,425,195,425,185,428,181,431,178,435,173,435,169,440,172,450,169,459,169,466,165,475" style="outline:none;" target="_self"     />
+			
+				<area  alt="" title="屏東" onclick="setmap(22.3908927,120.3476015)" shape="poly" coords="164,491,167,483,169,473,170,461,169,454,169,447,172,444,178,444,181,440,191,437,200,435,211,435,216,437,221,435,229,435,233,445,231,452,222,458,217,464,216,473,218,484,220,498,224,498,227,503,243,512,247,519,245,524,249,528,249,533,247,538,247,545,244,551,244,557,240,557,237,553,231,552,229,556,223,552,216,537,216,529,211,518,204,508,192,500,178,495,175,489,170,489" style="outline:none;" target="_self"     />
+			
+				<area shape="rect" coords="447,457,450,459"  alt="Image Map" style="outline:none;" title="Image Map" href="http://www.image-maps.com/index.php?aff=mapped_users_0"     />
+			
+			</map>
+
+		<a href="#rank"><img src="jquery-mobile/images/medal.png" class="image2" /></a>
+		<a href="#rank"><img src="jquery-mobile/images/placeholder.png" class="image3" /></a>
+		
+      </div>
+	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
+		<div data-iconpos="top" data-role="navbar">
+		  <ul>
+			<li><a href="#home" class="ui-btn-active ui-state-persist" id="homemap" data-icon="custom">地圖</a></li>
+			<li><a href="#photo" id="camera" data-icon="custom">拍照</a></li>
+			<li><a href="#news" id="newsfeed" data-icon="custom">動態時報</a></li>
+			<li><a href="#personal" id="profile" data-icon="custom">個人檔案</a></li> 		
+		  </ul>
+		</div>
+	  </div>
+	</div>
+<!--相機頁面-->
+<div data-role="page" id="take_photo" onload="capturePhotoEdit();">
+  <div data-role="header" data-position="fixed">
+		<table>
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
+			<td align="center"><b><h3>Crazy Bee</h3></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li></td>
+		</table>	
+	  </div>
+  <div data-role="content">內容
+    <button onclick="">Capture Photo</button> <br>
+    <button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+  </div>
+</div>
+
+<!--相機打卡頁面-->
+	<div data-role="page" id="photo">
+	  <div data-role="header" data-position="fixed">
+		<table>
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
+			<td align="center"><b><h3>Crazy Bee</h3></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li></td>
+		</table>	
+	  </div>
+	  <div data-role="content">
+		<div id="check_in">
+			<h3 style="font-family: Monaco, 微軟正黑體;" align="center">P O S T</h3>
+			<form>
+				<textarea>對圖片寫下評論...</textarea>
+			</form>
+			<div class="picture w3-display-container">
+				<img src="jquery-mobile/images/montain.jpg" id="photoimg" style="width: 100%; opacity: 0.8;">
+				<span onclick="this.parentElement.style.display='none'" class="w3-display-topright w3-closebtn w3-padding-large w3-text-white">&times;</span>
+			</div>
+			<div>
+				<form class="w3-container">
+				<p>
+					<table>
+						<td><input class="w3-check" type="checkbox"></td>
+						<td><label class="w3-validate">儲存相片但不顯示於動態</label></td>
+					</table>
+				</p>
+				</form>
+				<span class="w3-display-left fa fa-map-marker w3-padding-large w3-text-black" style="font-size: 30px;">       chiayi city</span>
+				<hr>
+				<table style="margin-bottom: 0;">
+					<td><button class="button button1 fa fa-check"></button></td> 
+				    <td><button class="button button2 fa fa-close"></button></td>
+				</table>
+			</div>
+		</div>
+	  </div>
+	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
+		<div data-iconpos="top" data-role="navbar">
+		  <ul>
+			<li><a href="#home" id="homemap1" data-icon="custom">地圖</a></li>
+			<li><a href="#photo" class="ui-btn-active ui-state-persist" onclick="capturePhotoEdit();" id="camera1"  data-icon="custom">拍照</a></li>
+			<li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
+			<li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li> 		
+		  </ul>
+		</div>
+	  </div>
+	</div>
+	
+<!--動態時報-->
+<div data-role="page" id="news">
+	  <div data-role="header" data-position="fixed">
+		<table>
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
+			<td align="center"><b><h3>Crazy Bee</h3></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li>
+		</table>	
+	  </div>
+	  <!--card的內容----> 
+		<div data-role="content" align="center">
+		  <div class="card w3-round w3-container" style="background-color: rgba(204, 204, 255, 0.1);">  
+			<div>
+				<br>
+				<table>
+				<tr>
+				  <td width="20%"><img class="w3-left w3-circle w3-margin-right" src="jquery-mobile/images/girl.png" style="width:100%;" align="center"/></td>  <!--大頭照-->
+				  <td width="30%" align="left"><h4><b>陳小菊</b></h4></td>   <!--姓名-->
+				  <td class="w3-right w3-opacity"><span>10 sec</span></td>   <!--po文時間-->
+				</tr>
+				</table>
+				<hr class="w3-clear">   <!--分隔線-->
+			</div>
+			<div class="container">   <!--路線點的圖-->
+				<b>路線圖</b>
+			</div>
+			<br>
+			<p>其實這張圖根本不在台灣，哇哈哈哈哈哈~~~被騙了齁齁齁~~勸你還是不要追蹤我XDDDD</p>   <!--敘述-->
+			<img src="jquery-mobile/images/montain.jpg" alt="montain" style="width:100%">   <!--相片擺放處-->
+			
+			<div class="container"> <br>   <!--按鈕-->
+				<table>
+					<td><button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-heart"></i>  Like</button></td>
+					<td><button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button></td>
+				</table>
+			</div>
+		  </div>
+		  
+	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
+		<div data-iconpos="top" data-role="navbar">
+		  <ul>
+			<li><a href="#home" id="homemap2" data-icon="custom">地圖</a></li>
+			<li><a href="#photo" id="camera2" data-icon="custom">拍照</a></li>
+			<li><a href="#news" class="ui-btn-active ui-state-persist" id="newsfeed2" data-icon="custom">動態時報</a></li>
+			<li><a href="#personal" id="profile2" data-icon="custom">個人檔案</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</div>
+</div>
+<!--個人檔案-->
+<div data-role="page" id="personal">
+  <div>
+	<img src="jquery-mobile/images/101.jpg" class="img_back" width= "100%" height="40%">
+	<img src="jquery-mobile/images/boy.png" class="img_pro" width="25%" >
+	<div class="proname">David Ho</div>
+	<table class="place" style="color:white; background-color:rgb(230, 230, 230,0.4);">
+		<td align="center"><img src="jquery-mobile/images/love.png" width="12%">  <b>123,456</b></td>
+		<td align="center"><img src="jquery-mobile/images/love plus.png" width="14%">  <b>追蹤</b></td>
+	</table>
+  </div> 
+
+  <div class="w3-row">
+	<table>
+		<td><a href="#" onclick="openCity(event, 'Album');">
+			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Album</div>
+			</a></td>
+			
+		<td><a href="#" onclick="openCity(event, 'Route');">
+			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Route</div>
+			</a></td>
+			
 	</table>
   </div>
+  
+  <!--相簿-->
+  <div id="Album" class="w3-container city">
+    <div class="alb">
+		<a href="#">
+			<img src="jquery-mobile/images/river_101.jpg" width="300" height="200">
+		</a>
+		<div class="desc">~台北走透透~</div>
+	</div>
+
+	<div class="alb">
+		<a href="#">
+			<img src="jquery-mobile/images/7buty.jpg" width="600" height="400">
+		</a>
+		<div class="desc">透心涼之旅</div>
+	</div>
+
+	<div class="alb">
+		<a href="#">
+			<img src="jquery-mobile/images/alimontain.jpg" width="600" height="400">
+		</a>
+		<div class="desc">happy go go !!</div>
+	</div>
+
+	<div class="alb">
+		<a href="#">
+			<img src="jquery-mobile/images/wind.jpg" width="600" height="400">
+		</a>
+		<div class="desc">breezzzzz~~</div>
+	</div>
+
+  </div>
+	
+	<!--我的路線-->
+  <div id="Route1" class="w3-container city" align="center">
+	<div class="route">
+		<b>*高雄知性之旅*</b>
+	</div>
+	
+	<div class="route">
+		<b>*台南知性之旅*</b>
+	</div>
+	
+	<div class="route">
+		<b>*屏東知性之旅*</b>
+	</div>
+	
+	<div class="route">
+		<b>*屏東知性之旅*</b>
+	</div>
+	
+	<div class="route">
+		<b>*屏東知性之旅*</b>
+	</div>
+	
+	<div class="route">
+		<b>*屏東知性之旅*</b>
+	</div>
+  </div>
+
+		<script>
+			function openCity(evt, cityName) {
+			var i, x, tablinks;
+			x = document.getElementsByClassName("city");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablink");
+			for (i = 0; i < x.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
+			}
+			document.getElementById(cityName).style.display = "block";
+			evt.currentTarget.firstElementChild.className += " w3-border-red";
+			}
+		</script>
+		<!--<script>
+		//預設顯示第一個tab
+			var _showTab = 0;
+			var $defaultLi = $('ul.tabs li').eq(_showTab).addClass('active');
+			$($defaultLi.find('a').attr('href')).siblings().hide();
+		</script>-->
+  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
+    <div data-iconpos="top" data-role="navbar">
+      <ul>
+        <li><a href="#home" id="homemap3" data-icon="custom">地圖</a></li>
+        <li><a href="#photo" id="camera3" data-icon="custom">拍照</a></li>
+        <li><a href="#news" id="newsfeed3" data-icon="custom">動態時報</a></li>
+        <li><a href="#personal" class="ui-btn-active ui-state-persist" id="profile3" data-icon="custom">個人檔案</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--景點簡介-->
+<div id="Attractions" data-add-back-btn="true" data-back-btn-text="返回" data-back-btn-theme="c" data-role="page">
+  <div data-role="header">
+    <table><tr>
+      <td  onclick="$.mobile.changePage('#home');">返回</td><td><td>
+    <h1 id="titlename" data-position="fixed" align="center">景點名稱</h1></td><td style="right:0;">
+    <p id="changer" onclick="$.mobile.changePage('#route');goroute();">路線</p>
+    </td>
+    </tr>
+    </table>
+  </div>
+  <div align="center" data-role="content">
+    <div id="div-photo"><img name="slideshow" width="240" height="144" id="slideshow" style="width:100%;min-height:350px;max-height:600px;"></div>
+    <br>
+    <div id="div-info" data-theme="m" align="center">
+      <table style="text-align:center;">
+        <thead>
+        <tr class="w3-light-grey">
+          <th colspan="2">景點資訊</th>
+        </tr>
+        </thead>
+        <tr>
+          <td>地址</td>
+          <td id="addr">Smith</td>
+        </tr>
+        <tr>
+          <td >電話</td>
+          <td id="phone">Jackson</td>
+        </tr>
+        <tr>
+          <td >營業時間</td>
+          <td id="time">Jackson</td>
+        </tr>
+        <tr>
+          <td id="attraction" colspan="2">這裡放景點簡介</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<!--排行榜-->
+<div id="rank" data-role="page">
+	  <div style=" background-color:white; padding:5%;">
+	  <table>
+		<td width="5%" align="center"><i class="fa fa-chevron-left" style="font-size:24px;" align="left" onclick="goBack()"></i></td>
+		<td align="center"><h4><b>高雄市</b></h4></td>
+	  </table>
+	  </div>
+	  <!--動態產生-->
+	  <div id="showBlock"></div>
+		<script>
+		tenblock();
+		<!--去呼叫php的function我沒有打-->
+		function tenblock() {
+		for(vol=1;vol<=10;){
+			  if ((vol%2)==1){
+			  $("#showBlock").append('<div id="div' + vol + '" data-role="content" style="background-color:#baeeee; padding:3%;"><table><td align="center" width="10%">'+vol+'</td><td align="left" width="40%">壽山動物園</td><td align="right" width="15%"><img src="jquery-mobile/images/like.png" width="40%"></td><td align="left" width="25%">123,123</td></table></div>');
+			  vol++;
+			  }
+			  else{
+			  $("#showBlock").append('<div id="div' + vol + '" data-role="content" style="background-color:white; padding:3%;"><table><td align="center" width="10%">'+vol+'</td><td align="left" width="40%">漁人碼頭</td><td align="right" width="15%"><img src="jquery-mobile/images/like.png" width="40%"></td><td align="left" width="25%">123,456</td></table></div>');
+			  vol++;
+			  } }
+		  }
+
+		</script>
+</div>
+
+<!--路線頁面-->
+<div data-role="page" id="route">
+  <div data-role="header">
+    <table><tr>
+      <td  onclick="$.mobile.changePage('#Attractions');">返回</td><td>
+    <h1 align="center">路線</h1></td><td style="right:0;">
+      </tr>
+    </table>
+  </div>
+    <div data-role="content" style=" background-color:#F9F9D9; padding:5px;">
+      <table width="100%" align="center">
+        <tr>
+          <td height="25" align="center" valign="center" style="font-size:16px; ;">路線選擇</td>
+        </tr>
+        <tr>
+          <td height="20" align="center" valign="center" style="font-size:12px;;">嘉義市 嘉義大學新民校區</td>
+        </tr>
+      </table>
+    </div>
+
+</div>
 </body>
->>>>>>> origin/master
 </html>
