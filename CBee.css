@@ -1,15 +1,18 @@
+table {
+	width: 100%;
+}
 /*設定footer的icon*/
 #homemap .ui-icon{
-	width:30px;
-	height:30px;
-	box-shadow:none;
+	width: 30px;
+	height: 30px;
+	box-shadow: none;
 	background: url(jquery-mobile/images/planet-earth.png) 50% 50% no-repeat;
 	background-size: 24px 24px;
 }
 #camera .ui-icon{
-	width:30px;
-	height:30px;
-	box-shadow:none;
+	width: 30px;
+	height: 30px;
+	box-shadow: none;
 	background: url(jquery-mobile/images/photo-camera.png) 50% 50% no-repeat;
 	background-size: 24px 24px;
 }
@@ -29,87 +32,110 @@
 }
 
 /*設定主頁地圖位置*/
-#imgmap{
-	position:relative;
-	top:40%;
-	left:-5%;
-}
-.mapbox{
-	position:relative;
-	width:100%;
-	height:100%;
-	bottom:0;
-}
-.image1{
-			position:absolute;
-			z-index:1;
+.image1 {
+			position: absolute;
+			z-index: 1;
+			opacity:0.4;
 }
 
-.image2{
-			position:absolute;
-			top:82%;
-			left:6%;
-			width:56px;
-			height:60px;
-			z-index:2;
+.image2 {
+			position: fixed;
+			top: 82%;
+			left: 6%;
+			width: 12%;
+			height: auto;
+			opacity: 0.7;
+			z-index: 2;
+}
+
+.image3 {
+			position: fixed;
+			top: 82%;
+			left: 20%;
+			width: 12%;
+			height: auto;
+			opacity: 0.7;
+			z-index: 2;
 }
 /*個人檔案頁籤*/
-ul, li {
-	margin: 0;
-	padding: 0;
-	list-style: none;
+
+.city {display:none;}
+
+/*個人檔案個人圖片*/
+.img_back {
+	position: relative; 
+	z-index: 0;
+	min-height: 50%;
+	opacity: 0.5;
 }
-.abgne_tab {
-	clear: left;
-	width: 400px;
-	margin: 10px 0;
+.proname {
+    position: absolute;
+    top: 30%;
+    left: 10%;
+    font-size: 30px;
+	color: white;
+	z-index: 1;
 }
-ul.tabs {
+.img_pro{
+	position: absolute; 
+	/*z-index:1;*/ 
+	border: 3px solid #ddd; 
+	border-radius: 5px; 
+	padding: 5px; 
+	background-color: white;
+	right: 8%;
+	top: 22%;
+}
+table.place{
+	position: absolute;
+	top: 40%;
+}
+p.tracnum{
+	border-style: hidden;
+	border-radius: 5px;
+}
+.tow{
+	border-style: hidden;
+}
+
+/*相簿*/
+div.alb {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 180px;
+}
+
+div.alb:hover {
+    border: 1px solid #777;
+}
+
+div.alb img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+	background-color: white;
+}
+
+/*路線*/
+div.route {
+	margin: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 	width: 100%;
-	height: 32px;
-	border-bottom: 1px solid #999;
-	border-left: 1px solid #999;
+	height: 10%;
+	padding: 15px;
+    text-align: center;
+	background-color: #ffe6e6;
+	color: #6600ff;
 }
-ul.tabs li {
-	float: left;
-	height: 31px;
-	line-height: 31px;
-	overflow: hidden;
-	position: relative;
-	margin-bottom: -1px;	/* 讓 li 往下移來遮住 ul 的部份 border-bottom */
-	border: 1px solid #999;
-	border-left: none;
-	background: #e1e1e1;
-}
-ul.tabs li a {
-	display: block;
-	padding: 0 20px;
-	color: #000;
-	border: 1px solid #fff;
-	text-decoration: none;
-}
-ul.tabs li a:hover {
-	background: #ccc;
-}
-ul.tabs li.active  {
-	background: #fff;
-	border-bottom: 1px solid#fff;
-}
-ul.tabs li.active a:hover {
-	background: #fff;
-}
-div.tab_container {
-	clear: left;
-	width: 100%;
-	border: 1px solid #999;
-	border-top: none;
-	background: #fff;
-}
-div.tab_container .tab_content {
-	padding: 20px;
-}
-div.tab_container .tab_content h2 {
-	margin: 0 0 20px;
+
+div.route:hover {
+	border: 1px solid #777;
 }
 /*設定動態時報card*/
 .card {
@@ -126,14 +152,37 @@ div.tab_container .tab_content h2 {
 }
 
 span{
-	position:relative;
-	color:#99BBFF;
-	right:5px;
+	position: relative;
+	color: #99BBFF;
+	right: 5px;
 }
 
 .container {
     padding: 2px 16px;
 }
+/*相機打卡介面*/
 
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    font-size: 25px;
+    resize: none;
+}
 
+.button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
 
+.button1 {border-radius: 8px; background-color: red;}
+.button2 {border-radius: 8px; background-color: green;}

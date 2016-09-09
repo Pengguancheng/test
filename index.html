@@ -18,6 +18,9 @@
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" charset="utf-8" src="CBee.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiG3BFD_cc5barjH-4QchDE92ByomuAIY"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script><!--jquery ui-->
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script><!--jquery ui-->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"><!--jquery ui-->
     <script type="text/javascript" charset="utf-8">
       var pictureSource;
       var destinationType;
@@ -28,6 +31,22 @@
 		function goBack() {
 			window.history.back();
 		}
+		$.ajax({
+        url: "http://192.168.1.104/fbsdk/routename.php",
+        type:"GET",
+        dataType:'json',
+        success: function(data){
+            console.log(data);
+                $( function() {
+                $( "#postattraction" ).autocomplete({
+                        source: data
+                    });
+                  });
+        },
+        error: function(jqXHR) {
+            alert("發生錯誤: " + jqXHR.status);
+        },
+    })
 	</script>
 
 </head>
@@ -42,10 +61,10 @@
 	<div data-id="main" data-position="fixed" data-role="footer">
 		<div data-iconpos="top" data-role="navbar">
 			<ul>
-				<li><a href="#home" id="homemap1" data-icon="custom">地圖</a></li>
-				<li><a href="#photo" class="ui-btn-active ui-state-persist" id="camera1" data-icon="custom">拍照</a></li>
-				<li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
-				<li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li>
+				<li><a href="#home"  data-icon="custom">地圖</a></li>
+				<li><a href="#photo" class="ui-btn-active ui-state-persist"  data-icon="custom">拍照</a></li>
+				<li><a href="#news"  data-icon="custom">動態時報</a></li>
+				<li><a href="#personal" data-icon="custom">個人檔案</a></li>
 			</ul>
 		</div>
 	</div>
@@ -168,7 +187,7 @@
 		<div id="check_in">
 			<h3 style="font-family: Monaco, 微軟正黑體;" align="center">P O S T</h3>
 			<form>
-				<textarea>對圖片寫下評論...</textarea>
+				<textarea id="posttext" onclick="$('#posttext').val('')">對圖片寫下評論...</textarea>
 			</form>
 			<div class="picture w3-display-container">
 				<img src="jquery-mobile/images/montain.jpg" id="photoimg" style="width: 100%; opacity: 0.8;">
@@ -183,10 +202,10 @@
 					</table>
 				</p>
 				</form>
-				<span class="w3-display-left fa fa-map-marker w3-padding-large w3-text-black" style="font-size: 30px;">       chiayi city</span>
+				<input type="text" id="postattraction" name="景點名稱"/>
 				<hr>
 				<table style="margin-bottom: 0;">
-					<td><button class="button button1 fa fa-check"></button></td> 
+					<td><button class="button button1 fa fa-check" onclick="post()"></button></td>
 				    <td><button class="button button2 fa fa-close"></button></td>
 				</table>
 			</div>

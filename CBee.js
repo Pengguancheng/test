@@ -17,12 +17,13 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
         zoomControl: false,
         };
     var map ;
-    var name = "";
-    var fbid = "";
+    var name = "peng";
+    var fbid = "100011";
+    var userid="3";
 
 
 
-function onDeviceReady() {
+function onDeviceReady() {//裝置啟動的設定
     //fblogin();
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
@@ -30,6 +31,7 @@ function onDeviceReady() {
 //    map.setOptions({styles: stylesArray});
 //    $.mobile.changePage('#home');
     $.mobile.changePage('#photo');
+
 }
 function initialize() {
     var mapOptions = {
@@ -81,18 +83,18 @@ function onPhotoURISuccess(imageURI) {
 }
 
 function capturePhoto() {
-    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality:50,
+    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality:30,
     destinationType: destinationType.DATA_URL });
 }
 
 function capturePhotoEdit() {
-  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 30, allowEdit: true,
+  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, allowEdit: true,
     destinationType: destinationType.DATA_URL });
 }
 
 function getPhoto(source) {
   // Retrieve image file location from specified source
-  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 100,
     destinationType: destinationType.FILE_URI,
     sourceType: source });
 }
@@ -172,38 +174,50 @@ function goroute(){
 
 
 function win(r) {
-    alert("Upload Success");
+    //alert("Upload Success");
     console.log("Response = " + r.response);
     console.log("Sent = " + r.bytesSent);
+    return 1;
 }
 
 function fail(error) {
     alert("An error has occurred: Code = " + error.code);
     console.log("upload error source " + error.source);
     console.log("upload error target " + error.target);
+    return 0;
 }
 
-function upload_win(fileURL) {
-    var uri = encodeURI("http://bee.japanwest.cloudapp.azure.com//server_save.php");
+function upload_win(name) {
+    var uri = encodeURI("http://192.168.1.104//server_save.php");
     fileURL=imagesrc;
     var ft = new FileTransfer();
     var options = new FileUploadOptions();
     options.fileKey="file";
-    options.fileName="image.jpg";
+    options.fileName=name+".jpg";
     options.mimeType="image/jpg";
     options.trustAllHosts=true;
     var headers={'headerParam':'headerValue'};
 
     options.headers = headers;
 
-    ft.onprogress = function(progressEvent) {
-        if (progressEvent.lengthComputable) {
-          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
-        } else {
-          loadingStatus.increment();
+//    ft.onprogress = function(progressEvent) {
+//        if (progressEvent.lengthComputable) {
+//          loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
+//        } else {
+//          loadingStatus.increment();
+//        }
+//    };
+    ft.onprogress = function (progressEvt) {//显示上传进度条
+        if (progressEvt.lengthComputable) {
+            navigator.notification.progressValue(Math.round(( progressEvt.loaded / progressEvt.total ) * 100));
         }
-    };
-    ft.upload(fileURL, uri, win, fail, options);
+    }
+
+    var rs = ft.upload(fileURL, uri, win, fail, options);
+    if(rs == 1)
+        return name+".jpg";
+    else
+        return 0;
 
 }
 function fblogin(){
@@ -239,11 +253,41 @@ function fbcheck(){
                 fbid : fbid
             },
             success: function(data){
+                //alert(data);
+                userid = data;
+            },
+            error: function(jqXHR) {
+                alert("發生錯誤: " + jqXHR.status);
+            },
+        })
+}
+function post(){
+    var postdate = new Date();
+    var postattraction = $("#postattraction").val();
+    var posttext = $("#posttext").val()
+    var imgurl = upload_win(postdate.getTime()+userid);
+    if(imgurl == 0)
+        alert("照片上傳失敗");
+    else{
+        $.ajax({
+            url: "http://192.168.1.104//post.php",
+            type:"POST",
+            dataType:'json',
+            data:{
+                id : userid,
+                postattraction : postattraction,
+                posttext : posttext,
+                imgurl : imgurl
+            },
+            success: function(data){
                 alert(data);
             },
             error: function(jqXHR) {
                 alert("發生錯誤: " + jqXHR.status);
             },
         })
+    }
+
+
 }
 
