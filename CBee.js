@@ -20,6 +20,7 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
     var name = "peng";
     var fbid = "100011";
     var userid="3";
+    var uploadrs =1;
 
 
 
@@ -174,17 +175,16 @@ function goroute(){
 
 
 function win(r) {
-    //alert("Upload Success");
     console.log("Response = " + r.response);
     console.log("Sent = " + r.bytesSent);
-    return 1;
+    uploadrs =1;
 }
 
 function fail(error) {
     alert("An error has occurred: Code = " + error.code);
     console.log("upload error source " + error.source);
     console.log("upload error target " + error.target);
-    return 0;
+    uploadrs = 0;
 }
 
 function upload_win(name) {
@@ -213,12 +213,8 @@ function upload_win(name) {
         }
     }
 
-    var rs = ft.upload(fileURL, uri, win, fail, options);
-    if(rs == 1)
+    ft.upload(fileURL, uri, win, fail, options);
         return name+".jpg";
-    else
-        return 0;
-
 }
 function fblogin(){
     var ref = cordova.InAppBrowser.open('http://bee.japanwest.cloudapp.azure.com/loginfb.php', '_blank', 'location=yes','clearcache=yes');
@@ -266,26 +262,27 @@ function post(){
     var postattraction = $("#postattraction").val();
     var posttext = $("#posttext").val()
     var imgurl = upload_win(postdate.getTime()+userid);
-    if(imgurl == 0)
+    if(imgurl== 0)
         alert("照片上傳失敗");
     else{
         $.ajax({
-            url: "http://bee.japanwest.cloudapp.azure.com//post.php",
-            type:"POST",
-            dataType:'json',
-            data:{
-                id : userid,
-                postattraction : postattraction,
-                posttext : posttext,
-                imgurl : imgurl
-            },
-            success: function(data){
-                alert(data);
-            },
-            error: function(jqXHR) {
-                alert("發生錯誤: " + jqXHR.status);
-            },
-        })
+                      url: "http://bee.japanwest.cloudapp.azure.com//post.php",
+                      type:"POST",
+                      dataType:'json',
+                      data:{
+                          'id' : userid,
+                          'postattraction' : postattraction,
+                          'posttext' : posttext,
+                          'imgurl' : imgurl
+                      },
+                      success: function(data){
+                          alert(data);
+                      },
+                      error: function(jqXHR) {
+                          console.log(data);
+                          alert("發生錯誤: " + jqXHR.status);
+                      },
+                  })
     }
 
 
