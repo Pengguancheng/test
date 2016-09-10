@@ -188,7 +188,7 @@ function fail(error) {
 }
 
 function upload_win(name) {
-    var uri = encodeURI("http://192.168.1.104//server_save.php");
+    var uri = encodeURI("http://bee.japanwest.cloudapp.azure.com//server_save.php");
     fileURL=imagesrc;
     var ft = new FileTransfer();
     var options = new FileUploadOptions();
@@ -270,7 +270,7 @@ function post(){
         alert("照片上傳失敗");
     else{
         $.ajax({
-            url: "http://192.168.1.104//post.php",
+            url: "http://bee.japanwest.cloudapp.azure.com//post.php",
             type:"POST",
             dataType:'json',
             data:{
