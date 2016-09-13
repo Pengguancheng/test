@@ -31,22 +31,7 @@
 		function goBack() {
 			window.history.back();
 		}
-		$.ajax({
-        url: "http://bee.japanwest.cloudapp.azure.com//routename.php",
-        type:"GET",
-        dataType:'json',
-        success: function(data){
-            console.log(data);
-                $( function() {
-                $( "#postattraction" ).autocomplete({
-                        source: data
-                    });
-                  });
-        },
-        error: function(jqXHR) {
-            alert("發生錯誤: " + jqXHR.status);
-        },
-    })
+
 	</script>
 
 </head>
