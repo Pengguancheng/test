@@ -262,24 +262,42 @@
 </div>
 <!--個人檔案-->
 <div data-role="page" id="personal">
-  <div>
-	<img src="jquery-mobile/images/101.jpg" class="img_back" width= "100%" height="40%">
-	<img src="jquery-mobile/images/boy.png" class="img_pro" width="25%" >
-	<div class="proname">David Ho</div>
-	<table class="place" style="color:white; background-color:rgb(230, 230, 230,0.4);">
-		<td align="center"><img src="jquery-mobile/images/love.png" width="12%">  <b>123,456</b></td>
-		<td align="center"><img src="jquery-mobile/images/love plus.png" width="14%">  <b>追蹤</b></td>
-	</table>
-  </div> 
+	<div data-role="header" data-position="fixed">
+		<table>
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
+			<td align="center"><b><h3>Crazy Bee</h3></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li>
+		</table>	
+	</div>
+	<div>
+		<table>
+			<tr>
+				<td width="30%" height="30%"><div><img src="jquery-mobile/images/boy.png" class="img_pro" width="100px" ></div></td>
+				<td align="center">
+					<div><img src="jquery-mobile/images/group.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
+				</td>
+				<td align="center">
+					<div><img src="jquery-mobile/images/album.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
+				</td>
+				<td align="center">
+					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
+				</td>
+			</tr>
+			<tr>
+				<td><div class="proname">黃大銘</div></td>
+				<td colspan="3" align="center" width="70%" height="30%"><button class="w3-btn w3-theme-d1 w3-margin-bottom followbtn">EDIT</button></td> <!--如果非自己的個人檔案就是FOLLOW-->
+			</tr>
+		</table>
+	</div> 
 
   <div class="w3-row">
 	<table>
 		<td><a href="#" onclick="openCity(event, 'Album');">
-			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Album</div>
+			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Album</div>
 			</a></td>
 			
 		<td><a href="#" onclick="openCity(event, 'Route');">
-			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Route</div>
+			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Route</div>
 			</a></td>
 			
 	</table>
@@ -288,7 +306,7 @@
   <!--相簿-->
   <div id="Album" class="w3-container city">
     <div class="alb">
-		<a href="#">
+		<a href="#Album_route">
 			<img src="jquery-mobile/images/river_101.jpg" width="300" height="200">
 		</a>
 		<div class="desc">~台北走透透~</div>
@@ -365,7 +383,7 @@
 			var $defaultLi = $('ul.tabs li').eq(_showTab).addClass('active');
 			$($defaultLi.find('a').attr('href')).siblings().hide();
 		</script>-->
-  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
+  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #7a7a7a /*{a-bup-color}*/;">
     <div data-iconpos="top" data-role="navbar">
       <ul>
         <li><a href="#home" id="homemap3" data-icon="custom">地圖</a></li>
