@@ -1,6 +1,10 @@
 table {
 	width: 100%;
 }
+
+h1,h2,h3,h4,h5 {
+	font-family: Microsoft JhengHei;
+}
 /*設定footer的icon*/
 #homemap .ui-icon{
 	width: 30px;
@@ -62,6 +66,7 @@ table {
 .city {display:none;}
 
 /*個人檔案個人圖片*/
+
 .img_back {
 	position: relative; 
 	z-index: 0;
@@ -186,3 +191,16 @@ textarea {
 
 .button1 {border-radius: 8px; background-color: red;}
 .button2 {border-radius: 8px; background-color: green;}
+
+/*相簿下一層*/
+#owl-demo .item{
+  margin: 10px;
+}
+
+#owl-demo .item img{
+  display: block;
+  width: 100%;
+  height: 150px;
+  opacity: 0.5;
+}
+
