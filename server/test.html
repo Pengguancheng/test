@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>crazybee</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<script>
+	setInterval("aaa();", 5000)
+	function aaa(){
+			$.ajax({
+			url: "http://127.0.0.1/fbsdk/notice.php",
+			type:"GET",
+			dataType:'json',
+			success: function(data){
+				console.log(data);
+			},
+			error: function(jqXHR) {
+				alert("發生錯誤: " + jqXHR.status);
+			},
+		})
+	}
+
+	</script>
+</head>
+<body>
+
+
+  <!--下面的buttum,-->
+
+</body>
+</html>
