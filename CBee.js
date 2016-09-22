@@ -28,10 +28,9 @@ function onDeviceReady() {//裝置啟動的設定
     //fblogin();
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
-//    map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-//    map.setOptions({styles: stylesArray});
-//    $.mobile.changePage('#home');
-    $.mobile.changePage('#photo');
+    map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+    map.setOptions({styles: stylesArray});
+    $.mobile.changePage('#map');
 
 }
 function initialize() {
