@@ -21,7 +21,9 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
     var fbid = "100011";
     var userid="3";
     var uploadrs =1;
-
+	var attraction;// 不同地方都不能通用
+	var markers = [];
+	var markerCluster;	
 
 
 function onDeviceReady() {//裝置啟動的設定
@@ -29,34 +31,76 @@ function onDeviceReady() {//裝置啟動的設定
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
     map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-    map.setOptions({styles: stylesArray});
+    map.setOptions({styles: stylesArray});	
+	get_attraction();
     $.mobile.changePage('#map');
 
 }
-function initialize() {
-    var mapOptions = {
-        center: { lat: 23.5, lng: 122},   /*台灣座標*/
-        zoom: 8,
-        streetViewControl: false,
-        scaleControl: true,
-        zoomControl: false,
-        };
-        map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-        //addpoint(map);
-        map.setOptions({styles: stylesArray});
-        //setmap(22.0440905,121.515303)
-};
-function setmap(a,b) {
-         $.mobile.changePage('#map');
-         map.setCenter(new google.maps.LatLng(a,b));
-         map.setZoom(9);
-};
-function loadScript() {
-    var script = document.createElement("script");
-    script.src = "http://maps.googleapis.com/maps/api/js?callback=initialize";
-    document.body.appendChild(script);
+function mset(attraction){
+	console.log(attraction);
+	var marker;
+	var url;
+	for(i=0;i<attraction.length;i++){
+		url = 'images/attraction.png';
+		size = new google.maps.Size(32,32);
+		if(attraction[i].top == 1){
+			url = 'images/topattraction.png';
+			size = new google.maps.Size(64, 64);
+		}
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(attraction[i].latitude,attraction[i].longitude),
+			title:'1',
+			id:attraction[i].attraction_id,
+			name:attraction[i].attraction_name,
+			icon :{
+					url: url,
+					size: size,
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(0, 32)
+				  }
+		});
+		marker.setMap(map);
+		if(attraction[i].top == 0){
+			markers.push(marker);
+		}
+		else
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+	for(i=0;i<markers.length;i++){
+		markers[i].setMap(map);
+	}
+	markerCluster = new MarkerClusterer(map, markers,
+	{imagePath: 'images/m'});
 }
+function polling(){
+	$.ajax({
+			url: "http://192.168.1.103//fbsdk/notice.php",
+			type:"GET",
+			dataType:'text',
+			success: function(data){
+				console.log(data);
+			},
+			error: function(jqXHR) {
+			alert("發生錯誤: " + jqXHR.status);
+		},
+	})
+}
+function get_attraction(){
+$.ajax({
+		url: "http://192.168.1.103//fbsdk/marker.php",
+		type:"GET",
+		dataType:'json',
 
+		success: function(data){
+		  attraction = data;
+		  mset(data);
+		},
+		error: function(jqXHR) {
+		  console.log(data);
+		  alert("發生錯誤: " + jqXHR.status);
+		},
+	})	
+}
 function onPhotoDataSuccess(imageData) {
 
     var smallImage = document.getElementById('photoimg');
@@ -283,7 +327,5 @@ function post(){
                       },
                   })
     }
-
-
 }
 
