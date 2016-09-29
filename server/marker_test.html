@@ -21,7 +21,7 @@
 	var attraction;// 不同地方都不能通用
 	var markers = [];
 	var markerCluster;	
-	var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	var a = [];//test
 	var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":
     "labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":
     [{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},
@@ -44,9 +44,15 @@
 		$.ajax({
 			url: "http://127.0.0.1//fbsdk/notice.php",
 			type:"GET",
-			dataType:'text',
+			dataType:'json',
 			success: function(data){
 				console.log(data);
+				pset(data);
+				a =data;//test
+				for(i=0;i<data.length;i++){
+					if(data[i].class == "post")
+						pset(data[i]);
+				}
 			},
 			error: function(jqXHR) {
 			alert("發生錯誤: " + jqXHR.status);
@@ -82,7 +88,6 @@
 			}
 			marker = new google.maps.Marker({
 				position: new google.maps.LatLng(attraction[i].latitude,attraction[i].longitude),
-				title:'1',
 				id:attraction[i].attraction_id,
 				name:attraction[i].attraction_name,
 				icon :{
@@ -104,8 +109,13 @@
 		}
 		markerCluster = new MarkerClusterer(map, markers,
 		{imagePath: '../images/m'});
+	}	
+	
+	function pset(data){
+		console.log("1");
 	}
-	</script>
+	
+</script>
 </head>
 <body>
 
@@ -116,7 +126,7 @@
 
 	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray}); 
-	get_attraction();
+	//get_attraction();
 	//setInterval("polling();", 5000)
 	
 	        // var markers = locations.map(
