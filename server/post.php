@@ -15,7 +15,8 @@
 	$context = $_POST['posttext'];
 	$data = mysql_query("INSERT INTO picture (attraction_id,user_id,date,content,purl)VALUES('".$rs[0]."','".$userid."','".$datetime."','".$context."','".$_POST['imgurl']."')");
 	$day = date("Y-m-d");
-	$data=mysql_query("SELECT *  FROM `route` WHERE user_id = ".$userid." AND date ='".$day."' GROUP BY user_id");		
+	insert_albums($pictureid[0]);
+	$data=mysql_query("SELECT *  FROM `route` WHERE user_id = ".$userid." AND date ='".$day."' GROUP BY route_id");//注意!!!改過但還沒測試	
 	$num = mysql_num_rows($data);
 	for($i=0; $i<$num;$i++){
 		$row[$i] = mysql_fetch_array($data);    //用arr[]陣列來記錄取得的會員資料
@@ -26,7 +27,7 @@
 			$data=mysql_query("SELECT MAX(route_id)  FROM `route` ");
 			$rs = mysql_fetch_row($data);
 			$rs[0]++;
-			$data=mysql_query("INSERT INTO route (use_id,firstid, next, `1`)VALUES(".$userid.",0,0,".$attractionid.")");			
+			$data=mysql_query("INSERT INTO route (user_id,route_name,firstid, next,date,`1`)VALUES(".$userid.",'".$day."',0,0,'".$day."',".$attractionid.")");			
 			$data=mysql_query("UPDATE `route` SET `next` = ".$rs[0]." WHERE `route_id` = ".$row[$num]['route_id']."");
 		}
 		else{
@@ -43,7 +44,35 @@
 	}
 	$data=mysql_query("INSERT INTO `notice` (user_id,date,class,picture_id,context) VALUES(".$userid.",'".$datetime."','post',".$pictureid[0].",'".$context."')");
 	echo json_encode('上傳成功');
-
+	function insert_albums($pictureid){
+		global $datetime,$day,$userid;
+		$userid = 2;
+		$data=mysql_query("SELECT *  FROM `albums` WHERE user_id = ".$userid." AND day ='".$day."' GROUP BY id");
+		$num = mysql_num_rows($data);
+		for($i=0; $i<$num;$i++){
+			$row[$i] = mysql_fetch_array($data);    //用arr[]陣列來記錄取得的會員資料
+		}	
+		 if($num>0){
+			$num--;
+			if($row[$num][30] != null){
+				$data=mysql_query("INSERT INTO albums (user_id,name,firstid, next,day,`1`)VALUES(".$userid.",'".$day."',0,0,'".$day."',".$pictureid.")");
+				$data=mysql_query("SELECT MAX(id)  FROM `albums` ");
+				$rs = mysql_fetch_row($data);
+				$data=mysql_query("UPDATE `albums` SET `next` = ".$rs[0]." WHERE `id` = ".$row[$num]['id']."");
+			}
+			else{
+				for($i=1;$i<30;$i++){
+					if($row[$num][$i] == null){
+							$data=mysql_query("UPDATE `albums` SET `".$i."` = ".$pictureid." WHERE `id` = ".$row[$num]['id']."");
+							break;
+						}				
+				}			
+			}		
+		}
+		else{
+			$data=mysql_query("INSERT INTO albums (user_id,name,firstid, next,day,`1`)VALUES(".$userid.",'".$day."',1,0,'".$day."',".$pictureid.")");
+		}
+	}
 
 ?>
 <?php

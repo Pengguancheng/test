@@ -32,7 +32,7 @@
     {"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":
     [{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}]    /*地圖樣式變更*/
 	  var image = {
-		url: 'js-marker-clusterer/images/cloudysunny.png',
+		url: 'js-marker-clusterer/images/placeholder.png',
 		// This marker is 20 pixels wide by 32 pixels high.
 		size: new google.maps.Size(32, 32),
 		// The origin for this image is (0, 0).
@@ -71,17 +71,33 @@
 	}
 	function mset(attraction){
 		console.log(attraction);
-		var marker
+		var marker;
+		var url;
 		for(i=0;i<attraction.length;i++){
+			url = 'js-marker-clusterer/images/attraction.png';
+			size = new google.maps.Size(32,32);
+			if(attraction[i].top == 1){
+				url = 'js-marker-clusterer/images/topattraction.png';
+				size = new google.maps.Size(64, 64);
+			}
 			marker = new google.maps.Marker({
 				position: new google.maps.LatLng(attraction[i].latitude,attraction[i].longitude),
 				title:'1',
 				id:attraction[i].attraction_id,
 				name:attraction[i].attraction_name,
-				icon : image
+				icon :{
+						url: url,
+						size: size,
+						origin: new google.maps.Point(0, 0),
+						anchor: new google.maps.Point(0, 32)
+					  }
 			});
 			marker.setMap(map);
-			markers.push(marker);
+			if(attraction[i].top == 0){
+				markers.push(marker);
+			}
+			else
+			marker.setAnimation(google.maps.Animation.BOUNCE);
 		}
 		for(i=0;i<markers.length;i++){
 			markers[i].setMap(map);
