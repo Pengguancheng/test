@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-	<script type="text/javascript" charset="utf-8" src="js-marker-clusterer/src/markerclusterer.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../markerclusterer.js"></script>
 	<script>
 	var mapOptions = {
 	center: { lat: 23.5, lng: 122},   /*台灣座標*/
@@ -74,10 +74,10 @@
 		var marker;
 		var url;
 		for(i=0;i<attraction.length;i++){
-			url = 'js-marker-clusterer/images/attraction.png';
+			url = '../images/attraction.png';
 			size = new google.maps.Size(32,32);
 			if(attraction[i].top == 1){
-				url = 'js-marker-clusterer/images/topattraction.png';
+				url = '../images/topattraction.png';
 				size = new google.maps.Size(64, 64);
 			}
 			marker = new google.maps.Marker({
@@ -103,7 +103,7 @@
 			markers[i].setMap(map);
 		}
 		markerCluster = new MarkerClusterer(map, markers,
-		{imagePath: 'js-marker-clusterer/images/m'});
+		{imagePath: '../images/m'});
 	}
 	</script>
 </head>
