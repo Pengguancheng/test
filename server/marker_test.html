@@ -40,25 +40,7 @@
 		// The anchor for this image is the base of the flagpole at (0, 32).
 		anchor: new google.maps.Point(0, 32)
 	  };
-	function polling(){
-		$.ajax({
-			url: "http://127.0.0.1//fbsdk/notice.php",
-			type:"GET",
-			dataType:'json',
-			success: function(data){
-				console.log(data);
-				pset(data);
-				a =data;//test
-				for(i=0;i<data.length;i++){
-					if(data[i].class == "post")
-						pset(data[i]);
-				}
-			},
-			error: function(jqXHR) {
-			alert("發生錯誤: " + jqXHR.status);
-		},
-	})
-	}
+
 	function get_attraction(){
 	$.ajax({
 		url: "http://127.0.0.1//fbsdk/marker.php",
@@ -90,6 +72,7 @@
 				position: new google.maps.LatLng(attraction[i].latitude,attraction[i].longitude),
 				id:attraction[i].attraction_id,
 				name:attraction[i].attraction_name,
+				title:attraction[i].attraction_name,
 				icon :{
 						url: url,
 						size: size,
@@ -110,9 +93,42 @@
 		markerCluster = new MarkerClusterer(map, markers,
 		{imagePath: '../images/m'});
 	}	
-	
+	function polling(){
+		$.ajax({
+			url: "http://127.0.0.1//fbsdk/notice.php",
+			type:"GET",
+			dataType:'json',
+			success: function(data){
+				console.log(data);
+				a =data;//test
+				for(i=0;i<data.length;i++){
+					if(data[i].class == "post")
+						pset(data[i]);
+				}
+			},
+			error: function(jqXHR) {
+			alert("發生錯誤: " + jqXHR.status);
+		},
+	})
+	}	
 	function pset(data){
-		console.log("1");
+		url = '../images/people55.png';
+		size = new google.maps.Size(64, 64);
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.gps.latitude,data.gps.longitude),
+			uid:data.user_id,
+			pid:data.picture_id,
+			name:data.name,
+			title:data.name,
+			icon :{
+					url: url,
+					size: size,
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(0, 32)
+				  }
+		});
+		marker.setMap(map);
+		marker.setAnimation(google.maps.Animation.BOUNCE);
 	}
 	
 </script>
@@ -126,8 +142,8 @@
 
 	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray}); 
-	//get_attraction();
-	//setInterval("polling();", 5000)
+	get_attraction();
+	setInterval("polling();", 5000)
 	
 	        // var markers = locations.map(
            // new google.maps.Marker({

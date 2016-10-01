@@ -10,7 +10,7 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
     {"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":
     [{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}]    /*地圖樣式變更*/
     var mapOptions = {
-        center: { lat: 23.5, lng: 122},   /*台灣座標*/
+        center: { lat: 23.5, lng: 121},   /*台灣座標*/
         zoom: 8,
         streetViewControl: false,
         scaleControl: true,
@@ -33,11 +33,12 @@ function onDeviceReady() {//裝置啟動的設定
     map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray});	
 	get_attraction();
+	polling();
     $.mobile.changePage('#map');
 
 }
 function mset(attraction){
-	console.log(attraction);
+	//console.log(attraction);
 	var marker;
 	var url;
 	for(i=0;i<attraction.length;i++){
@@ -49,7 +50,7 @@ function mset(attraction){
 		}
 		marker = new google.maps.Marker({
 			position: new google.maps.LatLng(attraction[i].latitude,attraction[i].longitude),
-			title:'1',
+			title:attraction[i].attraction_name,
 			id:attraction[i].attraction_id,
 			name:attraction[i].attraction_name,
 			icon :{
@@ -72,19 +73,6 @@ function mset(attraction){
 	markerCluster = new MarkerClusterer(map, markers,
 	{imagePath: 'images/m'});
 }
-function polling(){
-	$.ajax({
-			url: "http://192.168.1.103//fbsdk/notice.php",
-			type:"GET",
-			dataType:'text',
-			success: function(data){
-				console.log(data);
-			},
-			error: function(jqXHR) {
-			alert("發生錯誤: " + jqXHR.status);
-		},
-	})
-}
 function get_attraction(){
 $.ajax({
 		url: "http://192.168.1.103//fbsdk/marker.php",
@@ -100,6 +88,42 @@ $.ajax({
 		  alert("發生錯誤: " + jqXHR.status);
 		},
 	})	
+}
+function polling(){
+	$.ajax({
+			url: "http://192.168.1.103//fbsdk/notice.php",
+			type:"GET",
+			dataType:'json',
+			success: function(data){
+				console.log(data);
+				for(i=0;i<data.length;i++){
+					if(data[i].class == "post")
+						pset(data[i]);
+				}
+			},
+			error: function(jqXHR) {
+			alert("發生錯誤: " + jqXHR.status);
+		},
+	})
+}
+function pset(data){
+	url = 'images/people55.png';
+	size = new google.maps.Size(64, 64);
+	marker = new google.maps.Marker({
+		position: new google.maps.LatLng(data.gps.latitude,data.gps.longitude),
+		uid:data.user_id,
+		pid:data.picture_id,
+		name:data.name,
+		title:data.name,
+		icon :{
+				url: url,
+				size: size,
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(0, 32)
+			  }
+	});
+	marker.setMap(map);
+	marker.setAnimation(google.maps.Animation.BOUNCE);
 }
 function onPhotoDataSuccess(imageData) {
 

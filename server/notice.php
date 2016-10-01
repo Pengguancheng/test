@@ -53,12 +53,26 @@
 			$notice = mysql_query("SELECT * FROM `notice` WHERE `id`>".$a[0]." AND `user_id`=".$friendlist[$i]."");
 			for($j=0;$j<mysql_num_rows($notice);$j++){
 				$row[$rownum] = mysql_fetch_array($notice);
+				if($row[$rownum]['class'] == 'post'){
+					$row[$rownum]['gps'] = setgps($row[$rownum]['picture_id'],$rownum);
+				}
+				$data = mysql_query("SELECT purl,name FROM `user` WHERE `user_id`=".$row[$rownum]['id']."");
+				$rs = mysql_fetch_row($data);
+				$row[$rownum]['purl'] = $rs[0];
+				$row[$rownum]['name'] = $rs[1];
 				if($row[$rownum]['id'] > $maxid)
 					$maxid = $row[$rownum]['id'];
 				$rownum++;
 			}
 		}
-		$data=mysql_query("UPDATE `user` SET `noticeid` = ".$maxid." WHERE `user_id` = ".$userid."");
+		//$data=mysql_query("UPDATE `user` SET `noticeid` = ".$maxid." WHERE `user_id` = ".$userid."");
 		return $row;
 	}
+	function setgps($pid){//找到是哪個景點並抓取GPS
+		$data = mysql_query("SELECT attraction_id FROM `picture` WHERE `id`=".$pid."");
+		$rs =  mysql_fetch_row($data);
+		$data = mysql_query("SELECT latitude,longitude FROM `attraction` WHERE `attraction_id`=".$rs[0]."");
+		$gps = mysql_fetch_array($data);
+		return $gps;
+	}	
 ?>
