@@ -43,7 +43,7 @@
 		$data=mysql_query("INSERT INTO route (user_id,route_name,firstid, next,date,`1`)VALUES(".$userid.",'".$day."',1,0,'".$day."',".$attractionid.")");
 	}
 	$data=mysql_query("INSERT INTO `notice` (user_id,date,class,picture_id,context) VALUES(".$userid.",'".$datetime."','post',".$pictureid[0].",'".$context."')");
-	echo json_encode('上傳成功');
+	echo json_encode($pictureid[0]);
 	function insert_albums($pictureid){
 		global $datetime,$day,$userid;
 		$userid = 2;

@@ -24,6 +24,7 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
 	var attraction;// 不同地方都不能通用
 	var markers = [];
 	var markerCluster;	
+	var push = {};
 
 
 function onDeviceReady() {//裝置啟動的設定
@@ -33,9 +34,38 @@ function onDeviceReady() {//裝置啟動的設定
     map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray});	
 	get_attraction();
-	polling();
+	//polling();
+	push = PushNotification.init({ "android": {"senderID": "1080112310883"}});
+	setgcm();
     $.mobile.changePage('#map');
 
+}
+function setgcm(){
+	push.on('registration', function(data) {
+		console.log(data.registrationId);
+			$.ajax({
+					url: "http://192.168.1.103//fbsdk/set_gcmid.php",
+					type:"POST",
+					dataType:'json',
+					data:{
+					  'id' : userid,
+					  'rid' : data.registrationId					  
+					},
+					success: function(data){
+						console.log(data);
+					},
+					error: function(jqXHR) {
+					alert("發生錯誤: " + jqXHR.status);
+				},
+			})		
+		});
+	push.on('notification', function(data) {
+		console.log(JSON.stringify(data));		 
+		alert(data.additionalData.add);
+	});
+	push.on('error', function(e) {
+		alert(e);
+	});	
 }
 function mset(attraction){
 	//console.log(attraction);
@@ -84,7 +114,7 @@ $.ajax({
 		  mset(data);
 		},
 		error: function(jqXHR) {
-		  console.log(data);
+			//console.log(data);
 		  alert("發生錯誤: " + jqXHR.status);
 		},
 	})	
@@ -92,8 +122,11 @@ $.ajax({
 function polling(){
 	$.ajax({
 			url: "http://192.168.1.103//fbsdk/notice.php",
-			type:"GET",
+			type:"POST",
 			dataType:'json',
+			data:{
+			  'id' : userid
+			},
 			success: function(data){
 				console.log(data);
 				for(i=0;i<data.length;i++){
@@ -343,7 +376,7 @@ function post(){
                           'imgurl' : imgurl
                       },
                       success: function(data){
-                          alert(data);
+						  postgcm(data);
                       },
                       error: function(jqXHR) {
                           console.log(data);
@@ -351,5 +384,30 @@ function post(){
                       },
                   })
     }
+}
+function postgcm(pid){
+    var postdate = new Date();
+    var postattraction = $("#postattraction").val();
+    var posttext = $("#posttext").val()
+        $.ajax({
+			url: "http://192.168.1.103//fbsdk/gcm.php",
+			type:"POST",
+			dataType:'json',
+			data:{
+			  'id' : userid,
+			  'postattraction' : postattraction,
+			  'posttext' : posttext,
+			  'pid' : pid,
+			  ''
+			},
+			success: function(data){
+				alert('上傳成功');
+			},
+			error: function(jqXHR) {
+			  console.log(data);
+			  alert("發生錯誤: " + jqXHR.status);
+			},
+		})
+    
 }
 

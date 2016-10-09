@@ -4,7 +4,7 @@
 	mysql_select_db("bee");//選擇資料庫
 	mysql_query("set names utf8");//以utf8讀取資料，讓資料可以讀取中文
 	date_default_timezone_set("Asia/Taipei");
-	$userid = 1;
+	$userid = $_POST['id'];
 	$friendlist = get_friend_data();
 	$num = count($friendlist);
 	$senddata = get_notice();
