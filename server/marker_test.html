@@ -22,6 +22,7 @@
 	var markers = [];
 	var markerCluster;	
 	var a = [];//test
+	var actmarker = [];	
 	var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":
     "labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":
     [{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},
@@ -97,7 +98,7 @@
 		$.ajax({
 			url: "http://127.0.0.1//fbsdk/notice.php",
 			type:"GET",
-			dataType:'json',
+			dataType:'JSON',
 			success: function(data){
 				console.log(data);
 				a =data;//test
@@ -129,7 +130,19 @@
 		});
 		marker.setMap(map);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
+		actmarker[actmarker.length] = marker;
 	}
+	var actnum = 0;
+	var time = setInterval(function(){
+		if(actmarker.length>0){
+			actnum = actnum % actmarker.length;
+			console.log(actnum);
+			actmarker[actnum].setMap(null);
+			actmarker[actnum] = actmarker[actmarker.length - 1];
+			actmarker.pop();
+			actnum++;
+		}
+	}, 500);
 	
 </script>
 </head>
@@ -142,8 +155,9 @@
 
 	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray}); 
-	//get_attraction();
-	//setInterval("polling();", 5000)
+	get_attraction();
+	setInterval("polling();", 5000);
+	//polling();
 	
 	        // var markers = locations.map(
            // new google.maps.Marker({

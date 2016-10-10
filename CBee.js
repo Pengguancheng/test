@@ -25,18 +25,31 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
 	var markers = [];
 	var markerCluster;	
 	var push = {};
+	var actmarker = [];	
+	var actnum = 0;
 
 
 function onDeviceReady() {//裝置啟動的設定
-    //fblogin();
+    fblogin();
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
     map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray});	
 	get_attraction();
 	//polling();
-	push = PushNotification.init({ "android": {"senderID": "1080112310883"}});
+	setInterval("polling();", 5000);
+	push = PushNotification.init({ "android": {"senderID": "1080112310883","icon": "icon.png"}});
 	setgcm();
+	setInterval(function(){
+		if(actmarker.length>0){
+			actnum = actnum % actmarker.length;
+			console.log(actnum);
+			actmarker[actnum].setMap(null);
+			actmarker[actnum] = actmarker[actmarker.length - 1];
+			actmarker.pop();
+			actnum++;
+		}
+	}, 500);
     $.mobile.changePage('#map');
 
 }
@@ -157,6 +170,7 @@ function pset(data){
 	});
 	marker.setMap(map);
 	marker.setAnimation(google.maps.Animation.BOUNCE);
+	actmarker[actmarker.length] = marker;
 }
 function onPhotoDataSuccess(imageData) {
 
@@ -382,13 +396,13 @@ function post(){
                           console.log(data);
                           alert("發生錯誤: " + jqXHR.status);
                       },
-                  })
+                  });
     }
 }
 function postgcm(pid){
     var postdate = new Date();
     var postattraction = $("#postattraction").val();
-    var posttext = $("#posttext").val()
+    var posttext = $("#posttext").val();
         $.ajax({
 			url: "http://192.168.1.103//fbsdk/gcm.php",
 			type:"POST",
@@ -397,17 +411,16 @@ function postgcm(pid){
 			  'id' : userid,
 			  'postattraction' : postattraction,
 			  'posttext' : posttext,
-			  'pid' : pid,
-			  ''
+			  'pid' : pid
 			},
 			success: function(data){
-				alert('上傳成功');
+				alert("上傳成功");
 			},
 			error: function(jqXHR) {
 			  console.log(data);
 			  alert("發生錯誤: " + jqXHR.status);
-			},
-		})
+			}
+		});
     
 }
 
