@@ -65,7 +65,7 @@
 				$rownum++;
 			}
 		}
-		$data=mysql_query("UPDATE `user` SET `noticeid` = ".$maxid." WHERE `user_id` = ".$userid."");
+		//$data=mysql_query("UPDATE `user` SET `noticeid` = ".$maxid." WHERE `user_id` = ".$userid."");
 		return $row;
 	}
 	function setgps($pid){//找到是哪個景點並抓取GPS

@@ -82,7 +82,8 @@
 	'title' => $title,	
 	'add' => $additionalData,
 	'vibrate' => 1,
-	'sound' => 1
+	'sound' => 1,
+	'image' => '127.0.0.1/img/bee.png'
 
 	// you can also add images, additionalData
 	);
