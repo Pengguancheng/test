@@ -30,13 +30,18 @@ var stylesArray = [{"featureType":"water","elementType":"all","stylers":[{"hue":
 
 
 function onDeviceReady() {//裝置啟動的設定
-    fblogin();
+    //fblogin();
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
     map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-    map.setOptions({styles: stylesArray});	
-	get_attraction();
+    map.setOptions({styles: stylesArray});
+	//fbrd();
+
+
+}
+function fbrd(){
 	//polling();
+	get_attraction();
 	setInterval("polling();", 5000);
 	push = PushNotification.init({ "android": {"senderID": "1080112310883","icon": "icon.png"}});
 	setgcm();
@@ -50,14 +55,13 @@ function onDeviceReady() {//裝置啟動的設定
 			actnum++;
 		}
 	}, 500);
-    $.mobile.changePage('#map');
-
+    $.mobile.changePage('#map');	
 }
 function setgcm(){
 	push.on('registration', function(data) {
 		console.log(data.registrationId);
 			$.ajax({
-					url: "http://192.168.1.103//fbsdk/set_gcmid.php",
+					url: "http://bee.japanwest.cloudapp.azure.com//set_gcmid.php",
 					type:"POST",
 					dataType:'json',
 					data:{
@@ -118,7 +122,7 @@ function mset(attraction){
 }
 function get_attraction(){
 $.ajax({
-		url: "http://192.168.1.103//fbsdk/marker.php",
+		url: "http://bee.japanwest.cloudapp.azure.com//marker.php",
 		type:"GET",
 		dataType:'json',
 
@@ -134,7 +138,7 @@ $.ajax({
 }
 function polling(){
 	$.ajax({
-			url: "http://192.168.1.103//fbsdk/notice.php",
+			url: "http://bee.japanwest.cloudapp.azure.com//notice.php",
 			type:"POST",
 			dataType:'json',
 			data:{
@@ -331,9 +335,9 @@ function upload_win(name) {
         return name+".jpg";
 }
 function fblogin(){
-    var ref = cordova.InAppBrowser.open('http://bee.japanwest.cloudapp.azure.com/loginfb.php', '_blank', 'location=yes','clearcache=yes');
+    var ref = cordova.InAppBrowser.open('https://www.facebook.com/dialog/oauth?scope=public_profile,email,user_friends,user_about_me,user_tagged_places&client_id=1651644911825387&redirect_uri=http://bee.japanwest.cloudapp.azure.com//loginfb.html', '_blank', 'location=yes');
 
-    ref.addEventListener('loadstop', function()
+    ref.addEventListener('stop', function()
         {
             ref.executeScript(
                 {code: "window.localStorage.getItem('name');"},
@@ -345,12 +349,13 @@ function fblogin(){
                 {code: "window.localStorage.getItem('fbid');"},
                 function(values){
                     fbid = values[0];
-                    ref.close();
+					fbcheck();
+                    //ref.close();
                 }
             );
 
         });
-    ref.addEventListener('exit',fbcheck);
+    //ref.addEventListener('exit',fbcheck);
 }
 function fbcheck(){
     alert('id:'+fbid+" name : "+name);
@@ -365,6 +370,7 @@ function fbcheck(){
             success: function(data){
                 //alert(data);
                 userid = data;
+				//fbrd();
             },
             error: function(jqXHR) {
                 alert("發生錯誤: " + jqXHR.status);
@@ -391,6 +397,7 @@ function post(){
                       },
                       success: function(data){
 						  postgcm(data);
+						  $.mobile.changePage('#news');
                       },
                       error: function(jqXHR) {
                           console.log(data);
@@ -404,7 +411,7 @@ function postgcm(pid){
     var postattraction = $("#postattraction").val();
     var posttext = $("#posttext").val();
         $.ajax({
-			url: "http://192.168.1.103//fbsdk/gcm.php",
+			url: "http://bee.japanwest.cloudapp.azure.com//gcm.php",
 			type:"POST",
 			dataType:'json',
 			data:{
