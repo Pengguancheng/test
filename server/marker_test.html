@@ -44,7 +44,7 @@
 
 	function get_attraction(){
 	$.ajax({
-		url: "http://127.0.0.1//fbsdk/marker.php",
+		url: "http://bee.japanwest.cloudapp.azure.com//marker.php",
 		type:"GET",
 		dataType:'json',
 
@@ -87,6 +87,9 @@
 			}
 			else
 			marker.setAnimation(google.maps.Animation.BOUNCE);
+			google.maps.event.addListener(marker, 'click', function() {  //跳轉到景點
+				alert(this.id);
+			});
 		}
 		for(i=0;i<markers.length;i++){
 			markers[i].setMap(map);
@@ -96,7 +99,7 @@
 	}	
 	function polling(){
 		$.ajax({
-			url: "http://127.0.0.1//fbsdk/notice.php",
+			url: "http://bee.japanwest.cloudapp.azure.com//notice.php",
 			type:"post",
 			dataType:'json',
 			data:{
@@ -159,7 +162,7 @@
 	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
     map.setOptions({styles: stylesArray}); 
 	get_attraction();
-	setInterval("polling();", 5000);
+	//setInterval("polling();", 5000);
 	//polling();
 	
 	        // var markers = locations.map(
