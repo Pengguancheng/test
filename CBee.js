@@ -40,8 +40,6 @@ function onDeviceReady() {//裝置啟動的設定
 	//fbrd();
 
 
-
-
 }
 function getdata(t1){
 	console.log("t1",t1);
@@ -192,10 +190,13 @@ function polling(){
 			},
 			success: function(data){
 				console.log(data);
-				for(i=0;i<data.length;i++){
-					if(data[i].class == "post")
-						pset(data[i]);
-				}
+				if(data!="0"){
+					console.log("aa");
+					for(i=0;i<data.length;i++){
+						if(data[i].class == "post")
+							pset(data[i]);
+					}
+				}	
 			},
 			error: function(jqXHR) {
 			alert("發生錯誤: " + jqXHR.status);
