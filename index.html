@@ -39,11 +39,21 @@
 <body style="font-family: Times New Roman, 微軟正黑體;">
 <!--地圖頁面-->
 <div data-role="page" id="map" >
+	<div data-role="panel" id="myPanel" data-swipe-close="true">
+		<h2>側拉視窗</h2>
+		<p>動態</p>
+		<p>個人</p>
+		<p>連結</p>
+	</div>  <!--加-->
 	<div data-role="header">
-		<h1>一窩瘋</h1>
+		<table>   <!--改-->
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+			<td align="center"><b><h4>Crazy Bee</h4></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+		</table>
 	</div>
-	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" >內容
-	</div>
+	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" ></div>
+	<a href="#rank"><img src="jquery-mobile/images/cup.png" class="image2" /></a>
 	<div data-id="main" data-position="fixed" data-role="footer">
 		<div data-iconpos="top" data-role="navbar">
 			<ul>
@@ -59,11 +69,11 @@
 
 <div data-role="page" id="take_photo" onload="capturePhotoEdit();">
   <div data-role="header" data-position="fixed">
-		<table>
-			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
-			<td align="center"><b><h3>Crazy Bee</h3></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li></td>
-		</table>	
+	  <table>   <!--改-->
+		  <td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+		  <td align="center"><b><h4>Crazy Bee</h4></b></td>
+		  <td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+	  </table>
 	  </div>
   <div data-role="content">內容
     <button onclick="">Capture Photo</button> <br>
@@ -78,11 +88,11 @@
 <!--相機打卡頁面-->
 	<div data-role="page" id="photo">
 	  <div data-role="header" data-position="fixed">
-		<table>
-			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
-			<td align="center"><b><h3>Crazy Bee</h3></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li></td>
-		</table>	
+		  <table>   <!--改-->
+			  <td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+			  <td align="center"><b><h4>Crazy Bee</h4></b></td>
+			  <td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+		  </table>
 	  </div>
 	  <div data-role="content">
 		<div id="check_in">
@@ -115,7 +125,7 @@
 	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 		  <ul>
-			<li><a href="#map" id="homemap1" data-icon="custom">地圖</a></li>
+			<li><a href="#home" id="homemap1" data-icon="custom">地圖</a></li>
 			<li><a href="#photo" class="ui-btn-active ui-state-persist" onclick="capturePhotoEdit();" id="camera1"  data-icon="custom">拍照</a></li>
 			<li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
 			<li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li> 		
@@ -127,11 +137,11 @@
 <!--動態時報-->
 <div data-role="page" id="news">
 	  <div data-role="header" data-position="fixed">
-		<table>
-			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
-			<td align="center"><b><h3>Crazy Bee</h3></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li>
-		</table>	
+		  <table>   <!--改-->
+			  <td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+			  <td align="center"><b><h4>Crazy Bee</h4></b></td>
+			  <td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+		  </table>
 	  </div>
 	  <!--card的內容----> 
 		<div data-role="content" align="center">
@@ -165,7 +175,7 @@
 	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 		  <ul>
-			<li><a href="#map" id="homemap2" data-icon="custom">地圖</a></li>
+			<li><a href="#home" id="homemap2" data-icon="custom">地圖</a></li>
 			<li><a href="#photo" id="camera2" data-icon="custom">拍照</a></li>
 			<li><a href="#news" class="ui-btn-active ui-state-persist" id="newsfeed2" data-icon="custom">動態時報</a></li>
 			<li><a href="#personal" id="profile2" data-icon="custom">個人檔案</a></li>
@@ -177,16 +187,16 @@
 <!--個人檔案-->
 <div data-role="page" id="personal">
 	<div data-role="header" data-position="fixed">
-		<table>
-			<td align="center"><li onclick="$( myPanel ).panel( 'open' );" class="w3-hide-large fa fa-bars" style="font-size:24px;"></li></td> 
-			<td align="center"><b><h3>Crazy Bee</h3></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li>
-		</table>	
+		<table>   <!--改-->
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+			<td align="center"><b><h4>Crazy Bee</h4></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+		</table>
 	</div>
 	<div>
 		<table>
 			<tr>
-				<td width="30%" height="30%"><div><img src="jquery-mobile/images/boy.png" class="img_pro" width="100px" ></div></td>
+				<td width="25%"><div><img src="jquery-mobile/images/boy.png" class="img_pro" width="80px" ></div></td>
 				<td align="center">
 					<div><img src="jquery-mobile/images/group.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
 				</td>
@@ -199,7 +209,7 @@
 			</tr>
 			<tr>
 				<td><div class="proname">黃大銘</div></td>
-				<td colspan="3" align="center" width="70%" height="30%"><button class="w3-btn w3-theme-d1 w3-margin-bottom followbtn">EDIT</button></td> <!--如果非自己的個人檔案就是FOLLOW-->
+				<td colspan="3" align="center" width="50%"><button class="w3-btn w3-theme-d1 w3-margin-bottom followbtn">EDIT</button></td> <!--如果非自己的個人檔案就是FOLLOW-->
 			</tr>
 		</table>
 	</div> 
@@ -300,7 +310,7 @@
   <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #7a7a7a /*{a-bup-color}*/;">
     <div data-iconpos="top" data-role="navbar">
       <ul>
-        <li><a href="#map" id="homemap3" data-icon="custom">地圖</a></li>
+        <li><a href="#home" id="homemap3" data-icon="custom">地圖</a></li>
         <li><a href="#photo" id="camera3" data-icon="custom">拍照</a></li>
         <li><a href="#news" id="newsfeed3" data-icon="custom">動態時報</a></li>
         <li><a href="#personal" class="ui-btn-active ui-state-persist" id="profile3" data-icon="custom">個人檔案</a></li>
@@ -313,7 +323,7 @@
 <div id="Attractions" data-add-back-btn="true" data-back-btn-text="返回" data-back-btn-theme="c" data-role="page">
   <div data-role="header">
     <table><tr>
-      <td  onclick="$.mobile.changePage('#map');">返回</td><td><td>
+      <td  onclick="$.mobile.changePage('#home');">返回</td><td><td>
     <h1 id="titlename" data-position="fixed" align="center">景點名稱</h1></td><td style="right:0;">
     <p id="changer" onclick="$.mobile.changePage('#route');goroute();">路線</p>
     </td>
