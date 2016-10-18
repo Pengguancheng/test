@@ -10,6 +10,37 @@ h1,h2,h3,h4,h5 {
 	
 }
 
+/*側拉*/
+#myPanel ul {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+	background-color: #e6e6ff;
+}
+
+#myPanel li a {
+	display: block;
+	width: auto;
+	text-decoration: none;
+}
+
+/*新增路線*/
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    opacity: 0.7;
+}
+
+input[type=text]:focus {
+    border: 3px solid #555;
+}
+
 /*設定主頁地圖位置*/
 .image1 {
 			position: absolute;

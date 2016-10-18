@@ -40,11 +40,24 @@
 <!--地圖頁面-->
 <div data-role="page" id="map" >
 	<div data-role="panel" id="myPanel" data-swipe-close="true">
-		<h2>側拉視窗11</h2>
-		<p>動態</p>
-		<p>個人</p>
-		<p>連結</p>
-	</div>  <!--加-->
+		<div id="panel_pro" align="center">
+			<img src="jquery-mobile/images/boy.png" class="img_pro" width="80px"/>
+			<div class="proname">黃大銘</div>
+			<hr>
+		</div>
+		<!--側拉通知-->
+		<!--<div id="panel_notify">-->
+			<!--<ul>-->
+				<!--<li><a href="#"><img src="jquery-mobile/images/school-bell.png" width="40"/> 徐煖柔 在 台北101 </a></li>-->
+				<!--<li><a href="#"><img src="jquery-mobile/images/school-bell.png" width="40"/> 徐煖柔 在 台北101 </a></li>-->
+				<!--<li><a href="#"><img src="jquery-mobile/images/school-bell.png" width="40"/> 徐煖柔 在 台北101 </a></li>-->
+				<!--<li><a href="#"><img src="jquery-mobile/images/school-bell.png" width="40"/> 徐煖柔 在 台北101 </a></li>-->
+				<!--<li><a href="#"><img src="jquery-mobile/images/school-bell.png" width="40"/> 徐煖柔 在 台北101 </a></li>-->
+			<!--</ul>-->
+		<!--</div>-->
+		<a href="#Attractions" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;">  </button></a>
+		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
+	</div>  <!--加改-->
 	<div data-role="header">
 		<table>   <!--改-->
 			<td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
@@ -53,7 +66,8 @@
 		</table>
 	</div>
 	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" ></div>
-	<a href="#rank"><img src="jquery-mobile/images/cup.png" class="image2" /></a>
+	<!--改回rank-->
+	<!--<a href="#Attractions"><img src="jquery-mobile/images/cup.png" class="image2" /></a>-->排行榜
 	<div data-id="main" data-position="fixed" data-role="footer">
 		<div data-iconpos="top" data-role="navbar">
 			<ul>
@@ -97,13 +111,13 @@
 	  <div data-role="content">
 		<div id="check_in">
 			<h3 style="font-family: Monaco, 微軟正黑體;" align="center">P O S T</h3>
-			<form>
-				<textarea id="posttext" onclick="$('#posttext').val('')">對圖片寫下評論...</textarea>
-			</form>
 			<div class="picture w3-display-container">
 				<img src="jquery-mobile/images/montain.jpg" id="photoimg" style="width: 100%; opacity: 0.8;">
 				<span onclick="this.parentElement.style.display='none'" class="w3-display-topright w3-closebtn w3-padding-large w3-text-white">&times;</span>
 			</div>
+			<form>
+				<textarea id="posttext" onclick="$('#posttext').val('')">對圖片寫下評論...</textarea>
+			</form>
 			<div>
 				<form class="w3-container">
 				<p>
@@ -116,8 +130,8 @@
 				<input type="text" id="postattraction" name="景點名稱"/>
 				<hr>
 				<table style="margin-bottom: 0;">
-					<td><button class="button button1 fa fa-check" onclick="post()"></button></td>
-				    <td><button class="button button2 fa fa-close"></button></td>
+					<td><button class="button button2 fa fa-check" onclick="post()"></button></td>
+				    <td><button class="button button1 fa fa-close"></button></td>
 				</table>
 			</div>
 		</div>
@@ -125,7 +139,7 @@
 	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 		  <ul>
-			<li><a href="#home" id="homemap1" data-icon="custom">地圖</a></li>
+			<li><a href="#map" id="homemap1" data-icon="custom">地圖</a></li>
 			<li><a href="#photo" class="ui-btn-active ui-state-persist" onclick="capturePhotoEdit();" id="camera1"  data-icon="custom">拍照</a></li>
 			<li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
 			<li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li> 		
@@ -175,7 +189,7 @@
 	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 		  <ul>
-			<li><a href="#home" id="homemap2" data-icon="custom">地圖</a></li>
+			<li><a href="#map" id="homemap2" data-icon="custom">地圖</a></li>
 			<li><a href="#photo" id="camera2" data-icon="custom">拍照</a></li>
 			<li><a href="#news" class="ui-btn-active ui-state-persist" id="newsfeed2" data-icon="custom">動態時報</a></li>
 			<li><a href="#personal" id="profile2" data-icon="custom">個人檔案</a></li>
@@ -310,7 +324,7 @@
   <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #7a7a7a /*{a-bup-color}*/;">
     <div data-iconpos="top" data-role="navbar">
       <ul>
-        <li><a href="#home" id="homemap3" data-icon="custom">地圖</a></li>
+        <li><a href="#map" id="homemap3" data-icon="custom">地圖</a></li>
         <li><a href="#photo" id="camera3" data-icon="custom">拍照</a></li>
         <li><a href="#news" id="newsfeed3" data-icon="custom">動態時報</a></li>
         <li><a href="#personal" class="ui-btn-active ui-state-persist" id="profile3" data-icon="custom">個人檔案</a></li>
@@ -322,11 +336,11 @@
 <!--景點簡介-->
 <div id="Attractions" data-add-back-btn="true" data-back-btn-text="返回" data-back-btn-theme="c" data-role="page">
   <div data-role="header">
+
     <table><tr>
-      <td  onclick="$.mobile.changePage('#home');">返回</td><td><td>
-    <h1 id="titlename" data-position="fixed" align="center">景點名稱</h1></td><td style="right:0;">
-    <p id="changer" onclick="$.mobile.changePage('#route');goroute();">路線</p>
-    </td>
+		<td width="5%" align="center"><i class="fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
+		<td><h1 id="titlename" data-position="fixed" align="center">景點名稱</h1></td>
+		<td style="right:0;"><p id="changer" onclick="$.mobile.changePage('#attroute');goroute();">路線</p></td>
     </tr>
     </table>
   </div>
@@ -361,9 +375,9 @@
 </div>
 <!--排行榜-->
 <div id="rank" data-role="page">
-	  <div style=" background-color:white; padding:5%;">
+	  <div style=" background-color:white; padding:10px;">
 	  <table>
-		<td width="5%" align="center"><i class="fa fa-chevron-left" style="font-size:24px;" align="left" onclick="goBack()"></i></td>
+		<td width="5%" align="center"><i class="fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
 		<td align="center"><h4><b>高雄市</b></h4></td>
 	  </table>
 	  </div>
@@ -388,7 +402,7 @@
 </div>
 
 <!--路線頁面-->
-<div data-role="page" id="route">
+<div data-role="page" id="attroute">
   <div data-role="header">
     <table><tr>
       <td  onclick="$.mobile.changePage('#Attractions');">返回</td><td>
@@ -406,7 +420,40 @@
         </tr>
       </table>
     </div>
+</div>
 
+<!--新增景點-->
+<div data-role="page" id="addatt">
+	<div data-role="header">
+		<table>   <!--改-->
+			<td width="4%" align="center"><i class="w3-hide-large fa fa-chevron-left" style="font-size:18px; padding:15px" align="left" onclick="goBack()"></i></td>
+			<td align="center"><b><h4>新增景點</h4></b></td>
+		</table>
+	</div>
+	<div data-role="content">
+		<form>
+			<lable>景點名稱</lable>
+			<input type="text" id="Attname" name="fname" value="高雄美麗島" onclick="$('#Attname').val('')">
+			<br>
+			<lable>景點地址</lable>
+			<input type="text" id="Attadd" name="lname">
+			<br>
+			<lable>景點連絡電話</lable>
+			<input type="text" id="Atttel" name="lname" value="07-*******" onclick="$('#Atttel').val('')">
+			<br>
+			<lable>景點簡介</lable>
+			<textarea>簡介</textarea>
+			<br>
+			<table>
+				<td><label>景點圖片:</label></td>
+				<td width="70%"><button style="float: left;">上傳圖片</button></td>
+			</table>
+			<table style="margin-bottom: 0;">
+				<td><button class="button button2 fa fa-check" onclick="post()"></button></td>
+				<td><button class="button button1 fa fa-close"></button></td>
+			</table>
+		</form>
+	</div>
 </div>
 </body>
 </html>
