@@ -236,7 +236,7 @@ function mset(attraction){
 		else
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		google.maps.event.addListener(marker, 'click', function() {  //跳轉到景點
-			alert(this.id);
+			//alert(this.id);
 			clickmarker(this.id);
 			$.mobile.changePage('#Attractions');
 		});	
@@ -274,7 +274,6 @@ function polling(){
 			success: function(data){
 				console.log(data);
 				if(data!="0"){
-					console.log("aa");
 					for(i=0;i<data.length;i++){
 						if(data[i].class == "post")
 							pset(data[i]);
@@ -376,7 +375,24 @@ function clickmarker(val){
         },
     })
 }
-
+function autocomp(){
+	$.ajax({
+	url: "http://bee.japanwest.cloudapp.azure.com//routename.php",
+	type:"GET",
+	dataType:'json',
+	success: function(data){
+		console.log(data);
+			$( function() {
+			$( "#postattraction" ).autocomplete({
+				source: data
+			});
+		});
+	},
+	error: function(jqXHR) {
+	alert("發生錯誤: " + jqXHR.status);
+	},
+})
+}
 function goroute(){
     $.ajax({
         url: "http://bee.japanwest.cloudapp.azure.com//get_route_data.php",
@@ -543,7 +559,7 @@ function postgcm(pid){
 				alert("上傳成功");
 			},
 			error: function(jqXHR) {
-			  console.log(data);
+			  console.log(jqXHR.status);
 			  alert("發生錯誤: " + jqXHR.status);
 			}
 		});
