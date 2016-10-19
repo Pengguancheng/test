@@ -1,0 +1,108 @@
+
+#scene{
+  width: 900px;
+}
+
+#contactUs{
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+#contactUs #countrySelection {
+  border-bottom: 1px solid #d5cbc3;
+  border-top: 1px solid #d5cbc3;
+  position: relative;
+}
+
+#contactUs #countrySelection #countrySelection-wrapper {
+  overflow: hidden;
+  height: 55px;
+  padding: 0px;
+}
+
+#countrySelection-items {
+    margin: 0px;
+    padding: 1px 0;
+    list-style: none;
+    white-space: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#contactUs #countrySelector {
+  position: relative;
+  margin-left: -5px;
+  top: -1px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #d5cbc3;
+}
+.active p, .active a{
+  color: #669999 !important;
+}
+
+#contactUs #countrySelection ul li {
+    display: inline-block;
+    margin: 16px 24px;
+}
+
+#contactUs p, #contactUs a{
+  color: #d5cbc3;
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+a, a:visited, p{
+  text-decoration: none;
+  line-height: 0;
+  letter-spacing: 0.25px;
+  font-family: 'Gill Sans',
+  Calibri,
+  'Helvetica Neue',
+  Arial,
+  sans-serif;
+  font-weight: 100;
+  text-align:center;
+}
+
+.slick-prev, .icon-chevronleft {
+    transform: rotate(180deg);
+}
+.icon-chevronleft, .icon-chevronright {
+    background-image: url('http://www.res-testing.com/images/arrow.png');
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+.countrySelection-paddle-left, .countrySelection-paddle-right {
+    cursor: pointer;
+    border: none;
+    position: absolute;
+    top: 20px;
+    background-color: transparent;
+    width: 25px;
+    height: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+}
+.slick-prev, .countrySelection-paddle-left {
+    left: 0;
+}
+.arrow {
+    width: 25px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.slick-next, .countrySelection-paddle-right {
+    right: 0;
+}

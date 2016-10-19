@@ -5,14 +5,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>CrazyBee</title>
 	
-    <link href="CBee.css" rel="stylesheet" type="text/css">  <!--嵌入css檔-->
+    <link href="CBee.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="jquery-mobile/w3.css" />
+	<link rel="stylesheet" href="css/multi-device-scrolling-menu-style.css">		<!--嵌入css檔-->
 	
 	<link rel="stylesheet" href="jquery-mobile/themecolor.css" />  <!--顏色-->
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-	
-	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 	<script type="text/javascript" charset="utf-8" src="markerclusterer.js"></script>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
@@ -21,6 +22,8 @@
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script><!--jquery ui-->
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script><!--jquery ui-->
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"><!--jquery ui-->
+
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script><!--jquery ui-->
 	
     <script type="text/javascript" charset="utf-8">
       var pictureSource;
@@ -55,20 +58,20 @@
 				<!--<li><a href="#"><img src="jquery-mobile/images/school-bell.png" width="40"/> 徐煖柔 在 台北101 </a></li>-->
 			<!--</ul>-->
 		<!--</div>-->
-		<a href="#Attractions" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;">  </button></a>
+		<a href="#Attractions" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
 		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
 	</div>  <!--加改-->
 	<div data-role="header">
 		<table>   <!--改-->
-			<td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+			<td align="center"><li onclick="$('#myPanel').panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			<td align="center"><b><h4>Crazy Bee</h4></b></td>
 			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
 		</table>
 	</div>
 	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" ></div>
 	<!--改回rank-->
-	<!--<a href="#Attractions"><img src="jquery-mobile/images/cup.png" class="image2" /></a>-->排行榜
-	<div data-id="main" data-position="fixed" data-role="footer">
+	<!--<a href="#Attractions"><img src="jquery-mobile/images/cup.png" class="image2" /></a>-->
+	<div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 			<ul>
 				<li><a href="#map" class="ui-btn-active ui-state-persist" data-icon="custom">地圖</a></li>
@@ -110,7 +113,7 @@
 	  </div>
 	  <div data-role="content">
 		<div id="check_in">
-			<h3 style="font-family: Monaco, 微軟正黑體;" align="center">P O S T</h3>
+			<h3 style="font-family: Monaco, 微軟正黑體;" align="center">Check In</h3>
 			<div class="picture w3-display-container">
 				<img src="jquery-mobile/images/montain.jpg" id="photoimg" style="width: 100%; opacity: 0.8;">
 				<span onclick="this.parentElement.style.display='none'" class="w3-display-topright w3-closebtn w3-padding-large w3-text-white">&times;</span>
@@ -127,7 +130,7 @@
 					</table>
 				</p>
 				</form>
-				<input type="text" id="postattraction" name="景點名稱"/>
+				<input type="text" id="postattraction" name="postattraction" value="目前所在..." style="opacity: 0.7;" onclick="$('#postattraction').val('')"/>
 				<hr>
 				<table style="margin-bottom: 0;">
 					<td><button class="button button2 fa fa-check" onclick="post()"></button></td>
@@ -169,19 +172,68 @@
 				  <td class="w3-right w3-opacity"><span>10 sec</span></td>   <!--po文時間-->
 				</tr>
 				</table>
-				<hr class="w3-clear">   <!--分隔線-->
 			</div>
-			<div class="container">   <!--路線點的圖-->
-				<b>路線圖</b>
-			</div>
-			<br>
-			<p>其實這張圖根本不在台灣，哇哈哈哈哈哈~~~被騙了齁齁齁~~勸你還是不要追蹤我XDDDD</p>   <!--敘述-->
+			  <br>
+			  <br>
+			   <!--路線點的圖-->
+			  <div id="contactUs">
+				  <div id="countrySelection">
+					  <div id="countrySelection-wrapper">
+						  <ul id="countrySelection-items" style="">
+							  <li class="countrySelection-item active">
+								  <a href="#">大寮</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">鳳山國中</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">大東</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">鳳山</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">鳳山西(高雄市議會)</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">衛武營</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">技擊館</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">五塊厝</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">文化中心</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">信義國小</a>
+							  </li>
+							  <li class="countrySelection-item">
+								  <a href="#">美麗島</a>
+							  </li>
+						  </ul>
+						  <div class="countrySelection-paddles">
+						  <button class="countrySelection-paddle-left icon-chevronleft" aria-hidden="true">
+						  </button>
+						  <button class="countrySelection-paddle-right icon-chevronright" aria-hidden="true">
+						  </button>
+					  </div>
+					  </div>
+				  </div>
+			  </div>
+			<p>舒心的生活，希望每天都能如此----</p><br>   <!--敘述-->
 			<img src="jquery-mobile/images/montain.jpg" alt="montain" style="width:100%">   <!--相片擺放處-->
-			
-			<div class="container"> <br>   <!--按鈕-->
+			<div class="">
 				<table>
-					<td><button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-heart"></i>  Like</button></td>
-					<td><button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button></td>
+					<td></td>
+				</table>
+			</div>
+			<div> <br>   <!--按鈕-->
+				<table>
+					<td><button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-heart"></i>  Like Album</button></td>
+					<td><button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-check"></i>  Save Route</button></td>
 				</table>
 			</div>
 		  </div>
@@ -198,6 +250,8 @@
 	  </div>
 	</div>
 </div>
+	<!--匯入資料-->
+<script src="js/multi-device-scrolling-menu-index.js"></script>
 <!--個人檔案-->
 <div data-role="page" id="personal">
 	<div data-role="header" data-position="fixed">
@@ -333,19 +387,95 @@
   </div>
 </div>
 
+<!--相簿下一層(景點相簿)-->
+<div data-role="page" id="Album_route">
+	<div data-role="header" data-position="fixed">
+		<table>
+			<td align="center"><i class="fa fa-chevron-left" style="font-size:24px;" align="left" onclick="goBack()"></i></td>
+			<td align="center"><b><h3 style="font-family:Microsoft JhengHei;">台南知性之旅</h3></b></td>
+			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li>
+		</table>
+	</div>
+	<!--景點路線-->
+	<div id="contactUs-ab">
+		<div id="countrySelection-ab">
+			<div id="countrySelection-wrapper-ab">
+				<ul id="countrySelection-items-ab" style="">
+					<li class="countrySelection-item active">
+						<a href="#">大寮</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">鳳山國中</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">大東</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">鳳山</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">鳳山西(高雄市議會)</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">衛武營</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">技擊館</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">五塊厝</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">文化中心</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">信義國小</a>
+					</li>
+					<li class="countrySelection-item">
+						<a href="#">美麗島</a>
+					</li>
+				</ul>
+				<div class="countrySelection-paddles">
+					<button class="countrySelection-paddle-left icon-chevronleft" aria-hidden="true">
+					</button>
+					<button class="countrySelection-paddle-right icon-chevronright" aria-hidden="true">
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function() {
+
+		$("#owl-demo").owlCarousel({
+
+			autoPlay: 3000, //Set AutoPlay to 3 seconds
+
+			items : 3,
+			itemsDesktop : [1199,2],
+			itemsDesktopSmall : [979,2],
+			itemsTablet: [600,2],
+			itemsMobile : false
+
+			});
+
+		});
+	  </script>
+</div>
+
 <!--景點簡介-->
 <div id="Attractions" data-add-back-btn="true" data-back-btn-text="返回" data-back-btn-theme="c" data-role="page">
   <div data-role="header">
 
     <table><tr>
-		<td width="5%" align="center"><i class="fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
-		<td><h1 id="titlename" data-position="fixed" align="center">景點名稱</h1></td>
-		<td style="right:0;"><p id="changer" onclick="$.mobile.changePage('#attroute');goroute();">路線</p></td>
+		<td align="center"><i class="w3-hide-large fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
+		<td align="center"><h4 id="titlename">景點名稱</h4></td>
+		<td align="right"><p id="changer" onclick="$.mobile.changePage('#attroute');goroute();">路線</p></td>
     </tr>
     </table>
   </div>
   <div align="center" data-role="content">
-    <div id="div-photo"><img name="slideshow" width="240" height="144" id="slideshow" style="width:100%;min-height:350px;max-height:600px;"></div>
+    <div id="div-photo"><img name="slideshow" width="300" height="300" id="slideshow" style="width:100%;min-height:350px;max-height:600px;"></div>
     <br>
     <div id="div-info" data-theme="m" align="center">
       <table style="text-align:center;">
@@ -373,11 +503,12 @@
     </div>
   </div>
 </div>
+
 <!--排行榜-->
 <div id="rank" data-role="page">
 	  <div style=" background-color:white; padding:10px;">
 	  <table>
-		<td width="5%" align="center"><i class="fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
+		<td width="4%" align="center"><i class="fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
 		<td align="center"><h4><b>高雄市</b></h4></td>
 	  </table>
 	  </div>
@@ -433,16 +564,16 @@
 	<div data-role="content">
 		<form>
 			<lable>景點名稱</lable>
-			<input type="text" id="Attname" name="fname" value="高雄美麗島" onclick="$('#Attname').val('')">
+			<input type="text" id="Attname" name="Attname" value="高雄美麗島" onclick="$('#Attname').val('')"/>
 			<br>
 			<lable>景點地址</lable>
-			<input type="text" id="Attadd" name="lname">
+			<input type="text" id="Attadd" name="Attadd"/>
 			<br>
 			<lable>景點連絡電話</lable>
-			<input type="text" id="Atttel" name="lname" value="07-*******" onclick="$('#Atttel').val('')">
+			<input type="text" id="Atttel" name="Atttel" value="07-*******" onclick="$('#Atttel').val('')"/>
 			<br>
 			<lable>景點簡介</lable>
-			<textarea>簡介</textarea>
+			<textarea id="Attintro">簡介</textarea>
 			<br>
 			<table>
 				<td><label>景點圖片:</label></td>
