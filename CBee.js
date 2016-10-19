@@ -149,6 +149,11 @@ function mset(attraction){
 		}
 		else
 		marker.setAnimation(google.maps.Animation.BOUNCE);
+		google.maps.event.addListener(marker, 'click', function() {  //跳轉到景點
+			//alert(this.id);
+			clickmarker(this.id);
+			$.mobile.changePage('#Attractions');
+		});	
 	}
 	for(i=0;i<markers.length;i++){
 		markers[i].setMap(map);
@@ -179,10 +184,12 @@ function polling(){
 			dataType:'json',
 			success: function(data){
 				console.log(data);
-				for(i=0;i<data.length;i++){
-					if(data[i].class == "post")
-						pset(data[i]);
-				}
+				if(data!="0"){
+					for(i=0;i<data.length;i++){
+						if(data[i].class == "post")
+							pset(data[i]);
+					}
+				}	
 			},
 			error: function(jqXHR) {
 			alert("發生錯誤: " + jqXHR.status);
@@ -277,20 +284,24 @@ function clickmarker(val){//跳轉道景點頁面
         },
     })
 }
-function addpoint(map){
-    var markerid=1;
-    var marker = new google.maps.Marker({
-      position:new google.maps.LatLng(23.5,121),
-      map:map,
-      title: 'Hello World!'
-    });
-    google.maps.event.addListener(marker, 'click', function() {  //跳轉到景點
-        $.mobile.changePage('#Attractions');
-        clickmarker(markerid);
-    });
-    google.maps.event.addListener(marker, 'taphold', function() {   //跳轉到路線
-                   $.mobile.changePage('#route');
-               });
+
+function autocomp(){
+	$.ajax({
+	url: "http://bee.japanwest.cloudapp.azure.com//routename.php",
+	type:"GET",
+	dataType:'json',
+	success: function(data){
+		console.log(data);
+			$( function() {
+			$( "#postattraction" ).autocomplete({
+				source: data
+			});
+		});
+	},
+	error: function(jqXHR) {
+	alert("發生錯誤: " + jqXHR.status);
+	},
+})
 }
 function goroute(){
     $.ajax({
@@ -434,5 +445,29 @@ function post(){
                       },
                   })
     }
+}
+function postgcm(pid){
+    var postdate = new Date();
+    var postattraction = $("#postattraction").val();
+    var posttext = $("#posttext").val();
+        $.ajax({
+			url: "http://bee.japanwest.cloudapp.azure.com//gcm.php",
+			type:"POST",
+			dataType:'json',
+			data:{
+			  'id' : userid,
+			  'postattraction' : postattraction,
+			  'posttext' : posttext,
+			  'pid' : pid
+			},
+			success: function(data){
+				alert("上傳成功");
+			},
+			error: function(jqXHR) {
+			  console.log(jqXHR.status);
+			  alert("發生錯誤: " + jqXHR.status);
+			}
+		});
+    
 }
 

@@ -1,0 +1,64 @@
+<!DOCTYPE >
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>crazy bee</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiG3BFD_cc5barjH-4QchDE92ByomuAIY"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"/>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"/>
+	<script type="text/javascript" charset="utf-8" src="../markerclusterer.js"/>
+	
+	<script>
+		var album = {};
+
+	</script>
+<script  src="snapGallery.js"></script>
+</head>
+<body>
+<ul id="gallery-container">
+<!--  <li><img src="img/1.jpg" /></li>
+  <li><img src="img/2.jpg" /></li>
+  <li><img src="img/3.jpg" /></li>
+  <li><img src="img/4.jpg" /></li>
+  <li><img src="img/5.jpg" /></li>
+  <li><img src="img/6.jpg" /></li>
+  <li><img src="img/21.jpg" /></li>
+  <li><img src="img/22.jpg" /></li>-->
+</ul>
+<script>
+	for(i=1;i<20;i++){
+		var purl =  "<li><img src='img/"+i+".jpg' /></li>"
+		$('#gallery-container').append(purl);
+	}
+$(function() {
+	$(window).load(function() {
+		$('#gallery-container').snapGallery({
+			minWidth: 3,
+			maxCols: 4,
+			margin: 10
+		});
+	});
+})		
+	$.ajax({
+			url: "http://bee.japanwest.cloudapp.azure.com//album.php",
+			type:"GET",
+			dataType:'json',
+			data:{
+			},
+			success: function(data){
+				console.log(data);
+				album = data;
+			},
+			error: function(jqXHR) {
+			  console.log(jqXHR.status);
+			  alert("發生錯誤: " + jqXHR.status);
+			}
+		});
+
+	      
+</script>
+</body>
+</html>
+</html>	
