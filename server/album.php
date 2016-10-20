@@ -73,8 +73,8 @@ function get_news_data(){
 	$message = array();
 	
 	for($a=1;$a<=count($friendlist);$a++){
-		$getalbum = mysql_query("SELECT * FROM `albums` WHERE `user_id`= `".$friendlist[$a-1]."` ");
-		
+		$getalbum = mysql_query("SELECT * FROM `albums` WHERE `user_id`= ".$friendlist[$a-1]." AND `firstid`='1'");
+		//echo mysql_num_rows($getalbum)." ".count($friendlist)."  77\n";//test
 		for($b=1;$b<=mysql_num_rows($getalbum);$b++){
 			$rs=mysql_fetch_row($getalbum);
 			$albumdata[$num]["user"] = array("0" => $rs[2]);  //取得album創建人的id
@@ -82,8 +82,10 @@ function get_news_data(){
 			$albumdata[$num]["id"] = $rs[0];                  //取得album的id
 			$albumdata[$num]["next"] = $rs[7];                //判斷是否有下一本相簿
 			for($c=1;$c<=30;$c++){
-				$albumdata[$num][$c]= array("0" => $rs[$c+7]);   //把30個相片id放入陣列中 
-				$message[$num][$c] = array("0" => $rs[$c+7]);
+				if($rs[$c+7]!=null){
+					$albumdata[$num][$c]= array("0" => $rs[$c+7]);   //把30個相片id放入陣列中 
+					$message[$num][$c] = array("0" => $rs[$c+7]);
+				}
 			}
 
 			//若有下一本相簿就進入if函式中
@@ -115,55 +117,54 @@ function get_news_data(){
 		echo json_encode($nodata);
 	}
 	else{
-	//取得每本album中的使用者資料
-	for($a=1;$a<=count($albumdata);$a++){
-		$getuserdata= mysql_query("SELECT `name`,`picture_id` FROM `user` WHERE `user_id`=".$albumdata[$a-1]["user"][0]."");
-		
-		for($b=1;$b<=mysql_num_rows($getuserdata);$b++){ 
-			$row=mysql_fetch_row($getuserdata);
-			$albumdata[$a-1]["user"] = array("1" => $row[0], "2" => $row[1]);
-		}
-	}
-	
-	//取得每本album中每張相片的內文和景點id
-	for($a=1;$a<=count($albumdata);$a++){
-		for($b=1;$b<=(count($albumdata[$a-1]))-4;$b++){
-			$getpicturedata= mysql_query("SELECT `content`,`attraction_id`,`purl`,`id` FROM `picture` WHERE `id`=".$albumdata[$a-1][$b][0]."");
 
-			for($c=1;$c<=mysql_num_rows($getpicturedata);$c++){ 
-				$row=mysql_fetch_row($getpicturedata);
-				
-				//取得每本album中每張相片的景點名稱
-				$getattractionname= mysql_query("SELECT `attraction_name` FROM `attraction` WHERE `attraction_id`=".$row[1]."");
-				
-				for($d=1;$d<=mysql_num_rows($getattractionname);$d++){ 
-					$rs=mysql_fetch_row($getattractionname);
-					$albumdata[$a-1][$b] = array("pid" => $row[3], "1" => $row[0], "2" => $row[1], "3" => $rs[0], "4" => $row[2]);
+	
+	// 取得每本album中每張相片的內文和景點id
+	for($a=1;$a<=count($albumdata);$a++){
+		//echo "a= ".$a."\n";
+		for($b=1;$b<=(count($albumdata[$a-1]))-4;$b++){
+			//echo "b= ".$b."\n";
+			//echo "albumdata[$a-1][$b][0]= ".$albumdata[$a-1][$b][0]."\n";
+			if($albumdata[$a-1][$b][0] != null){
+				$getpicturedata= mysql_query("SELECT `content`,`attraction_id`,`purl`,`id` FROM `picture` WHERE `id`=".$albumdata[$a-1][$b][0]."");
+				for($c=1;$c<=mysql_num_rows($getpicturedata);$c++){ 
+					$row=mysql_fetch_row($getpicturedata);
+					if($row[1] != 0){
+					//echo "row[1] = ".$row[1]."\n";
+						// 取得每本album中每張相片的景點名稱
+						$getattractionname= mysql_query("SELECT `attraction_name` FROM `attraction` WHERE `attraction_id`=".$row[1]."");
+						
+						for($d=1;$d<=mysql_num_rows($getattractionname);$d++){ 
+							$rs=mysql_fetch_row($getattractionname);
+							$albumdata[$a-1][$b] = array("pid" => $row[3], "1" => $row[0], "2" => $row[1], "3" => $rs[0], "4" => $row[2]);
+						}
+					}	
 				}
-			}
+			}	
 		}
 	}
 	
 	//取得每張相片下的留言資料
 	for($a=1;$a<=count($message);$a++){
 		for($b=1;$b<=(count($message[$a-1]))-4;$b++){
-		$getmessagedata = mysql_query("SELECT `user_id`,`content` FROM `message` WHERE `picture_id`=".$message[$a-1][$b][0]." ORDER BY `date` DESC");
-		$message[$a-1][$b] = array();
-			for($c=1;$c<=mysql_num_rows($getmessagedata);$c++){ 
-				$row=mysql_fetch_row($getmessagedata);
-				
-				$getmsguserdata = mysql_query("SELECT `name`,`picture_id`,`purl` FROM `user` WHERE `user_id`=".$row[0]."");
-				
-				for($d=1;$d<=mysql_num_rows($getmsguserdata);$d++){ 
-					$rs=mysql_fetch_row($getmsguserdata);
-					//$message[$a-1][$b] = array( $c*4-3 => $row[0], $c*4-2 => $rs[0], $c*4-1 => $rs[1], $c*4 => $row[1]);
+			if($message[$a-1][$b][0] != null){
+				$getmessagedata = mysql_query("SELECT `user_id`,`content` FROM `message` WHERE `picture_id`=".$message[$a-1][$b][0]." ORDER BY `date` DESC");
+				$message[$a-1][$b] = array();
+				for($c=1;$c<=mysql_num_rows($getmessagedata);$c++){ 
+					$row=mysql_fetch_row($getmessagedata);
 					
-					$message[$a-1][$b][$c*4-3] = $row[0];
-					$message[$a-1][$b][$c*4-2] = $rs[0];
-					$message[$a-1][$b][$c*4-1] = $rs[1];
-					$message[$a-1][$b][$c*4] = $row[1];
+					$getmsguserdata = mysql_query("SELECT `name`,`picture_id`,`purl` FROM `user` WHERE `user_id`=".$row[0]."");
+					
+					for($d=1;$d<=mysql_num_rows($getmsguserdata);$d++){ 
+						$rs=mysql_fetch_row($getmsguserdata);
+						//$message[$a-1][$b] = array( $c*4-3 => $row[0], $c*4-2 => $rs[0], $c*4-1 => $rs[1], $c*4 => $row[1]);					
+						$message[$a-1][$b][$c*4-3] = $row[0];
+						$message[$a-1][$b][$c*4-2] = $rs[0];
+						$message[$a-1][$b][$c*4-1] = $rs[1];
+						$message[$a-1][$b][$c*4] = $row[1];
+					}
 				}
-			}
+			}	
 		}
 	}
 	
@@ -173,14 +174,26 @@ function get_news_data(){
 	$finalroute = array();
 	for($a=1;$a<=count($albumdata);$a++){
 		for($b=1;$b<=(count($albumdata[$a-1]))-4;$b++){
-			$temptdata[$a-1][$b-1] = $albumdata[$a-1][$b][3];
+			if(count($albumdata[$a-1][$b]) > 1){
+			//echo "acount(albumdata[$a-1][$b])= ".count($albumdata[$a-1][$b])."\n";
+				$temptdata[$a-1][$b-1] = $albumdata[$a-1][$b][3];
+			}
 		}
 	}
 	
 	$routedata = array_unique_2d($temptdata);
 	
-	for($a=1;$a<=count($message);$a++){
-		$routedata[$a-1] = array_values($routedata[$a-1]);
+	for($a=0;$a<count($routedata);$a++){
+		$routedata[$a] = array_values($routedata[$a]);
+	}
+	$routedatanum = floor(count($routedata)/2);
+	//echo "routedatanum= ".$routedatanum."\n";
+	$num = count($routedata)-1;
+	//echo "num= ".$num."\n";
+	for($a=0;$a<$routedatanum;$a++){
+		$tmp = $routedata[$num-$a];
+		$routedata[$num-$a] = $routedata[$a];
+		$routedata[$a] = $tmp;
 	}
 	
 

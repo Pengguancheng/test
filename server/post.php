@@ -46,7 +46,6 @@
 	echo json_encode($pictureid[0]);
 	function insert_albums($pictureid){
 		global $datetime,$day,$userid;
-		$userid = 2;
 		$data=mysql_query("SELECT *  FROM `albums` WHERE user_id = ".$userid." AND day ='".$day."' GROUP BY id");
 		$num = mysql_num_rows($data);
 		for($i=0; $i<$num;$i++){
