@@ -1,6 +1,6 @@
 var pointid;
 var imagesrc="ppp1.jpg";
-var stylesArray = [
+var stylesArray =  [
                       {
                           "featureType": "water",
                           "stylers": [
@@ -91,7 +91,7 @@ var stylesArray = [
                               }
                           ]
                       }
-                  ]   /*地圖樣式變更(改)*/
+                  ]    /*地圖樣式變更*/
     var mapOptions = {
         center: { lat: 23.5, lng: 121},   /*台灣座標*/
         zoom: 8,
@@ -107,18 +107,104 @@ var stylesArray = [
 	var attraction;// 不同地方都不能通用
 	var markers = [];
 	var markerCluster;	
+	var push = {};
+	var actmarker = [];	
+	var actnum = 0;
+	var dataset=0;
+	var number = 1;
 
 
 function onDeviceReady() {//裝置啟動的設定
-    //fblogin();
-    //pictureSource=navigator.camera.PictureSourceType;
-    //destinationType=navigator.camera.DestinationType;
+    fblogin();
+    pictureSource=navigator.camera.PictureSourceType;
+    destinationType=navigator.camera.DestinationType;
     map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-    map.setOptions({styles: stylesArray});	
-	//get_attraction();
-	//polling();
-    $.mobile.changePage('#map');
+    map.setOptions({styles: stylesArray});
+	//fbrd();
 
+
+}
+function getdata(t1){
+	console.log("t1",t1);
+	$.get(t1,function(t){
+	 console.log(JSON.stringify(t));
+	 //alert(number++);
+	 number++;
+	 senddata(t,t.data.length);
+	 if((t.paging.next==undefined)||(number>11))
+		return 1;
+	 else
+		getdata(t.paging.next);
+	})	
+}
+var loginattnum = 0;
+function senddata(data,len){
+	for(i=0;i<len;i++){
+			$.ajax({
+			type:"post",
+			url:"http://bee.japanwest.cloudapp.azure.com//test_fbsdk.php",
+			data:{
+						'city':data.data[i].place.location.city,
+						'latitude':data.data[i].place.location.latitude,
+						'longitude':data.data[i].place.location.longitude,
+						'address':data.data[i].place.location.street,
+						'name':data.data[i].place.name
+
+			},
+			success:function(callback){
+				loginattnum++;
+				console.log(loginattnum);
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	}
+}
+function fbrd(){
+	//polling();
+	get_attraction();
+	setInterval("polling();", 5000);
+	push = PushNotification.init({ "android": {"senderID": "1080112310883","icon": "icon.png"}});
+	setgcm();
+	setInterval(function(){
+		if(actmarker.length>0){
+			actnum = actnum % actmarker.length;
+			//console.log(actnum);
+			actmarker[actnum].setMap(null);
+			actmarker[actnum] = actmarker[actmarker.length - 1];
+			actmarker.pop();
+			actnum++;
+		}
+	}, 500);
+    $.mobile.changePage('#map');	
+}
+function setgcm(){
+	push.on('registration', function(data) {
+		console.log(data.registrationId);
+			$.ajax({
+					url: "http://bee.japanwest.cloudapp.azure.com//set_gcmid.php",
+					type:"POST",
+					dataType:'json',
+					data:{
+					  'id' : userid,
+					  'rid' : data.registrationId					  
+					},
+					success: function(data){
+						console.log(data);
+					},
+					error: function(jqXHR) {
+					alert("發生錯誤: " + jqXHR.status);
+				},
+			})		
+		});
+	push.on('notification', function(data) {
+		console.log(JSON.stringify(data));		 
+		alert(data.additionalData.add);
+	});
+	push.on('error', function(e) {
+		alert(e);
+	});	
 }
 function mset(attraction){
 	//console.log(attraction);
@@ -163,7 +249,7 @@ function mset(attraction){
 }
 function get_attraction(){
 $.ajax({
-		url: "http://192.168.1.103//fbsdk/marker.php",
+		url: "http://bee.japanwest.cloudapp.azure.com//marker.php",
 		type:"GET",
 		dataType:'json',
 
@@ -172,16 +258,19 @@ $.ajax({
 		  mset(data);
 		},
 		error: function(jqXHR) {
-		  console.log(data);
+			//console.log(data);
 		  alert("發生錯誤: " + jqXHR.status);
 		},
 	})	
 }
 function polling(){
 	$.ajax({
-			url: "http://192.168.1.103//fbsdk/notice.php",
-			type:"GET",
+			url: "http://bee.japanwest.cloudapp.azure.com//notice.php",
+			type:"POST",
 			dataType:'json',
+			data:{
+			  'id' : userid
+			},
 			success: function(data){
 				console.log(data);
 				if(data!="0"){
@@ -214,6 +303,7 @@ function pset(data){
 	});
 	marker.setMap(map);
 	marker.setAnimation(google.maps.Animation.BOUNCE);
+	actmarker[actmarker.length] = marker;
 }
 function onPhotoDataSuccess(imageData) {
 
@@ -224,35 +314,37 @@ function onPhotoDataSuccess(imageData) {
     smallImage.src = "data:image/jpeg;base64," + imageData;
 
     imagesrc="data:image/jpeg;base64," + imageData;
-
+	
+	autocomp();
     //upload_win(imagescr);
 
 }
 
 
-function onPhotoURISuccess(imageURI) {
+function onPhotoURISuccess(imageData) {
 
-  var largeImage = document.getElementById('largeImage');
+    var smallImage = document.getElementById('photoimg');
 
-  largeImage.style.display = 'block';
+    smallImage.style.display = 'block';
 
+    smallImage.src = "data:image/jpeg;base64," + imageData;
 
-  largeImage.src = imageURI;
+    imagesrc="data:image/jpeg;base64," + imageData;
 }
 
 function capturePhoto() {
-    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality:30,
+    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality:50,
     destinationType: destinationType.DATA_URL });
 }
 
 function capturePhotoEdit() {
   navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, allowEdit: true,
-    destinationType: destinationType.DATA_URL });
+    destinationType: destinationType.DATA_URL,targetWidth:400,targetHeight:400 });
 }
 
 function getPhoto(source) {
   // Retrieve image file location from specified source
-  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 100,
+  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
     destinationType: destinationType.FILE_URI,
     sourceType: source });
 }
@@ -261,8 +353,8 @@ function onFail(message) {
   alert('Failed because: ' + message);
 }
 
-function clickmarker(val){//跳轉道景點頁面
-    pointid=val;
+function clickmarker(val){
+    pointid=val;//跳轉道景點頁面
     $.ajax({
         url: "http://bee.japanwest.cloudapp.azure.com//get_attraction_data.php",
         type:"POST",
@@ -272,19 +364,18 @@ function clickmarker(val){//跳轉道景點頁面
         },
 
         success: function(data){
-            console.log(data);
-            $("#titlename").html(data[0]["name"]);
-            $("#attraction").html(data[0]["introduction"]);
-            $("#addr").html(data[0]["addr"]);
-            $("#phone").html(data[0]["phone"]);
-            $("#time").html(data[0]["time"]);
+            console.log(JSON.stringify(data));
+            $("#titlename").html(data.attraction_name);
+            $("#attraction").html(data.description);
+            $("#addr").html(data.address);
+            $("#phone").html(data.telephone);
+            $("#time").html(data.businesshour);
         },
         error: function(jqXHR) {
             alert("發生錯誤: " + jqXHR.status);
         },
     })
 }
-
 function autocomp(){
 	$.ajax({
 	url: "http://bee.japanwest.cloudapp.azure.com//routename.php",
@@ -316,6 +407,7 @@ function goroute(){
             console.log(data);
             var txtId = 1;
             var jsonNum = data.length; //json的長度
+			$("#showBlock").empty();
             for (var i = 0; i < jsonNum; i++) {
                 if ((txtId%2)==1){
                     $("#showBlock").append('<div id="div' + txtId + '" data-role="content" id="wrap" style="background-color:#C6D9F1;padding:10px;">路線名稱:'+data[i]["name"]+' ,讚數:'+data[i]["likenumber"]+ '</div>');
@@ -378,26 +470,28 @@ function upload_win(name) {
         return name+".jpg";
 }
 function fblogin(){
-    var ref = cordova.InAppBrowser.open('http://bee.japanwest.cloudapp.azure.com/loginfb.php', '_blank', 'location=yes','clearcache=yes');
+	var fbLoginSuccess = function (userData) {
+		console.log(JSON.stringify(userData));
+		fbid = userData.authResponse.userID;
+		facebookConnectPlugin.api(userData.authResponse.userID+"/?fields=name,tagged_places", ["public_profile","user_tagged_places"],
+		  function onSuccess (result) {
+			console.log("Result: "+JSON.stringify(result));
+			name = result.name;
+			//console.log(JSON.stringify(result.tagged_places));
+			senddata(result.tagged_places,result.tagged_places.data.length);
+			getdata(result.tagged_places.paging.next);
+			fbcheck();
+		  }, function onError (error) {
+			console.error("Failed: ", error);
+		  }
+		);
+	}
 
-    ref.addEventListener('loadstop', function()
-        {
-            ref.executeScript(
-                {code: "window.localStorage.getItem('name');"},
-                function(values){
-                    name = values[0];
-                }
-            );
-            ref.executeScript(
-                {code: "window.localStorage.getItem('fbid');"},
-                function(values){
-                    fbid = values[0];
-                    ref.close();
-                }
-            );
-
-        });
-    ref.addEventListener('exit',fbcheck);
+	facebookConnectPlugin.login(["public_profile","email","user_friends","user_tagged_places"], fbLoginSuccess,
+	  function loginError (error) {
+		console.error(JSON.stringify(error))
+	  }
+	);
 }
 function fbcheck(){
     alert('id:'+fbid+" name : "+name);
@@ -412,6 +506,7 @@ function fbcheck(){
             success: function(data){
                 //alert(data);
                 userid = data;
+				fbrd();
             },
             error: function(jqXHR) {
                 alert("發生錯誤: " + jqXHR.status);
@@ -437,13 +532,14 @@ function post(){
                           'imgurl' : imgurl
                       },
                       success: function(data){
-                          alert(data);
+						  postgcm(data);
+						  $.mobile.changePage('#news');
                       },
                       error: function(jqXHR) {
                           console.log(data);
                           alert("發生錯誤: " + jqXHR.status);
                       },
-                  })
+                  });
     }
 }
 function postgcm(pid){
@@ -470,4 +566,3 @@ function postgcm(pid){
 		});
     
 }
-

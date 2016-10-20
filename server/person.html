@@ -8,25 +8,77 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"/>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"/>
-	<script type="text/javascript" charset="utf-8" src="../markerclusterer.js"/>
+	<script type="text/javascript" charset="utf-8" src="../markerclusterer.js"/>	
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script><!--jquery ui-->
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script><!--jquery ui-->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"><!--jquery ui-->
+	<script src='http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script><!--jquery ui-->
 	
 	<script>
 		var album = {};
 
 	</script>
-<script  src="snapGallery.js"></script>
+<script src="js/multi-device-scrolling-menu-index.js"></script>
 </head>
 <body>
-<ul id="gallery-container">
-<!--  <li><img src="img/1.jpg" /></li>
-  <li><img src="img/2.jpg" /></li>
-  <li><img src="img/3.jpg" /></li>
-  <li><img src="img/4.jpg" /></li>
-  <li><img src="img/5.jpg" /></li>
-  <li><img src="img/6.jpg" /></li>
-  <li><img src="img/21.jpg" /></li>
-  <li><img src="img/22.jpg" /></li>-->
-</ul>
+	<ul id="gallery-container">
+	<!--  <li><img src="img/1.jpg" /></li>
+	  <li><img src="img/2.jpg" /></li>
+	  <li><img src="img/3.jpg" /></li>
+	  <li><img src="img/4.jpg" /></li>
+	  <li><img src="img/5.jpg" /></li>
+	  <li><img src="img/6.jpg" /></li>
+	  <li><img src="img/21.jpg" /></li>
+	  <li><img src="img/22.jpg" /></li>-->
+	</ul>
+	<div id="contactUs">
+	  <div id="countrySelection">
+		  <div id="countrySelection-wrapper">
+			  <ul id="countrySelection-items" style="">
+				  <li class="countrySelection-item active">
+					  <a href="#">大寮</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">鳳山國中</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">大東</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">鳳山</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">鳳山西(高雄市議會)</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">衛武營</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">技擊館</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">五塊厝</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">文化中心</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">信義國小</a>
+				  </li>
+				  <li class="countrySelection-item">
+					  <a href="#">美麗島</a>
+				  </li>
+			  </ul>
+			  <div class="countrySelection-paddles">
+			  <button class="countrySelection-paddle-left icon-chevronleft" aria-hidden="true">
+			  </button>
+			  <button class="countrySelection-paddle-right icon-chevronright" aria-hidden="true">
+			  </button>
+		  </div>
+		  </div>
+	  </div>
+	</div>
+<script  src="snapGallery.js"></script>
 <script>
 	for(i=1;i<20;i++){
 		var purl =  "<li><img src='img/"+i+".jpg' /></li>"
