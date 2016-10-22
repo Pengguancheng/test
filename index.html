@@ -18,12 +18,15 @@
 	<script type="text/javascript" charset="utf-8" src="markerclusterer.js"></script>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" charset="utf-8" src="CBee.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiG3BFD_cc5barjH-4QchDE92ByomuAIY"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiG3BFD_cc5barjH-4QchDE92ByomuAIY"></script>	
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script><!--jquery ui-->
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script><!--jquery ui-->
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"><!--jquery ui-->
-
 	<script src='http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script><!--jquery ui-->
+	<link rel="stylesheet" href="jquery-mobile/multi-device-scrolling-menu-style.css">	
+	<script  src="snapGallery.js"></script>
+	<link rel="stylesheet" href="jquery-mobile/glide.core.css">
+    <link rel="stylesheet" href="jquery-mobile/glide.theme.css">
+<script src="jquery-mobile/glide.js"></script>
 	
     <script type="text/javascript" charset="utf-8">
       var pictureSource;
@@ -60,12 +63,13 @@
 		<!--</div>-->
 		<a href="#Attractions" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
 		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
+		<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 	</div>  <!--加改-->
 	<div data-role="header">
 		<table>   <!--改-->
 			<td align="center"><li onclick="$('#myPanel').panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			<td align="center"><b><h4>Crazy Bee</h4></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+			<td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
 		</table>
 	</div>
 	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" ></div>
@@ -74,10 +78,10 @@
 	<div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 			<ul>
-				<li><a href="#map" class="ui-btn-active ui-state-persist" data-icon="custom">地圖</a></li>
-				<li><a href="#photo"  onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
-				<li><a href="#news"  data-icon="custom">動態時報</a></li>
-				<li><a href="#personal" data-icon="custom">個人檔案</a></li>
+				<li><a href="#map" onclick="mapreload()" class="ui-btn-active ui-state-persist" data-icon="custom">地圖</a></li>
+				<li><a onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
+				<li><a href="#news"  onclick="news_laod()" data-icon="custom">動態時報</a></li>
+				<li><a href="#personal" onclick="getalbum()" data-icon="custom">個人檔案</a></li>
 			</ul>
 		</div>
 	</div>
@@ -108,7 +112,7 @@
 		  <table>   <!--改-->
 			  <td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			  <td align="center"><b><h4>Crazy Bee</h4></b></td>
-			  <td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+			  <td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
 		  </table>
 	  </div>
 	  <div data-role="content">
@@ -143,9 +147,9 @@
 		<div data-iconpos="top" data-role="navbar">
 		  <ul>
 			<li><a href="#map" id="homemap1" data-icon="custom">地圖</a></li>
-			<li><a href="#photo" class="ui-btn-active ui-state-persist" onclick="capturePhotoEdit();" id="camera1"  data-icon="custom">拍照</a></li>
+			<li><a onclick="capturePhotoEdit()" class="ui-btn-active ui-state-persist" onclick="capturePhotoEdit();" id="camera1"  data-icon="custom">拍照</a></li>
 			<li><a href="#news" id="newsfeed1" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" id="profile1" data-icon="custom">個人檔案</a></li> 		
+			<li><a href="#personal" onclick="getalbum()" id="profile1" data-icon="custom">個人檔案</a></li> 		
 		  </ul>
 		</div>
 	  </div>
@@ -157,94 +161,20 @@
 		  <table>   <!--改-->
 			  <td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			  <td align="center"><b><h4>Crazy Bee</h4></b></td>
-			  <td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+			  <td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
 		  </table>
 	  </div>
 	  <!--card的內容----> 
-		<div data-role="content" align="center">
-		  <div class="card w3-round w3-container" style="background-color: rgba(204, 204, 255, 0.1);">  
-			<div>
-				<br>
-				<table>
-				<tr>
-				  <td width="20%"><img class="w3-left w3-circle w3-margin-right" src="jquery-mobile/images/girl.png" style="width:100%;" align="center"/></td>  <!--大頭照-->
-				  <td width="30%" align="left"><h4><b>陳小菊</b></h4></td>   <!--姓名-->
-				  <td class="w3-right w3-opacity"><span>10 sec</span></td>   <!--po文時間-->
-				</tr>
-				</table>
-			</div>
-			  <br>
-			  <br>
-			   <!--路線點的圖-->
-			  <div id="contactUs">
-				  <div id="countrySelection">
-					  <div id="countrySelection-wrapper">
-						  <ul id="countrySelection-items" style="">
-							  <li class="countrySelection-item active">
-								  <a href="#">大寮</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">鳳山國中</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">大東</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">鳳山</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">鳳山西(高雄市議會)</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">衛武營</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">技擊館</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">五塊厝</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">文化中心</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">信義國小</a>
-							  </li>
-							  <li class="countrySelection-item">
-								  <a href="#">美麗島</a>
-							  </li>
-						  </ul>
-						  <div class="countrySelection-paddles">
-						  <button class="countrySelection-paddle-left icon-chevronleft" aria-hidden="true">
-						  </button>
-						  <button class="countrySelection-paddle-right icon-chevronright" aria-hidden="true">
-						  </button>
-					  </div>
-					  </div>
-				  </div>
-			  </div>
-			<p>舒心的生活，希望每天都能如此----</p><br>   <!--敘述-->
-			<img src="jquery-mobile/images/montain.jpg" alt="montain" style="width:100%">   <!--相片擺放處-->
-			<div class="">
-				<table>
-					<td></td>
-				</table>
-			</div>
-			<div> <br>   <!--按鈕-->
-				<table>
-					<td><button type="button" class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-heart"></i>  Like Album</button></td>
-					<td><button type="button" class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-check"></i>  Save Route</button></td>
-				</table>
-			</div>
-		  </div>
+		<div data-role="content" align="center" id="newblock">
 		  
+		<button id="loading">載入更多貼文</button>  
 	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
 		<div data-iconpos="top" data-role="navbar">
 		  <ul>
 			<li><a href="#map" id="homemap2" data-icon="custom">地圖</a></li>
-			<li><a href="#photo" id="camera2" data-icon="custom">拍照</a></li>
+			<li><a onclick="capturePhotoEdit()" data-icon="custom">拍照</a></li>
 			<li><a href="#news" class="ui-btn-active ui-state-persist" id="newsfeed2" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" id="profile2" data-icon="custom">個人檔案</a></li>
+			<li><a href="#personal" onclick="getalbum()" id="profile2" data-icon="custom">個人檔案</a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -258,21 +188,21 @@
 		<table>   <!--改-->
 			<td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			<td align="center"><b><h4>Crazy Bee</h4></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+			<td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
 		</table>
 	</div>
 	<div>
 		<table>
 			<tr>
-				<td width="25%"><div><img src="jquery-mobile/images/boy.png" class="img_pro" width="80px" ></div></td>
+				<td width="25%"><img id="personpicture"  src="jquery-mobile/images/boy.png" class="img_pro" width="80px" ></td>
 				<td align="center">
-					<div><img src="jquery-mobile/images/group.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
+					<div><img src="jquery-mobile/images/group.png" class="icon_pro" width="40%"/><p id="fans" style="font-size:16px;">0</p></div>
 				</td>
 				<td align="center">
-					<div><img src="jquery-mobile/images/album.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
+					<div><img src="jquery-mobile/images/album.png" class="icon_pro" width="40%"/><p id="albumnum" style="font-size:16px;">0</p></div>
 				</td>
 				<td align="center">
-					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p style="font-size:16px;">0</p></div>
+					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p id="likealbum" style="font-size:16px;">0</p></div>
 				</td>
 			</tr>
 			<tr>
@@ -297,33 +227,7 @@
   
   <!--相簿-->
   <div id="Album" class="w3-container city">
-    <div class="alb">
-		<a href="#Album_route">
-			<img src="jquery-mobile/images/river_101.jpg" width="300" height="200">
-		</a>
-		<div class="desc">~台北走透透~</div>
-	</div>
-
-	<div class="alb">
-		<a href="#">
-			<img src="jquery-mobile/images/7buty.jpg" width="600" height="400">
-		</a>
-		<div class="desc">透心涼之旅</div>
-	</div>
-
-	<div class="alb">
-		<a href="#">
-			<img src="jquery-mobile/images/alimontain.jpg" width="600" height="400">
-		</a>
-		<div class="desc">happy go go !!</div>
-	</div>
-
-	<div class="alb">
-		<a href="#">
-			<img src="jquery-mobile/images/wind.jpg" width="600" height="400">
-		</a>
-		<div class="desc">breezzzzz~~</div>
-	</div>
+    <div class='alb'><img src='jquery-mobile/images/river_101.jpg' width='300' height='200'><div class='desc'>~台北走透透~</div></div>
 
   </div>
 	
@@ -379,7 +283,7 @@
     <div data-iconpos="top" data-role="navbar">
       <ul>
         <li><a href="#map" id="homemap3" data-icon="custom">地圖</a></li>
-        <li><a href="#photo" id="camera3" data-icon="custom">拍照</a></li>
+        <li><a onclick="capturePhotoEdit()" data-icon="custom">拍照</a></li>
         <li><a href="#news" id="newsfeed3" data-icon="custom">動態時報</a></li>
         <li><a href="#personal" class="ui-btn-active ui-state-persist" id="profile3" data-icon="custom">個人檔案</a></li>
       </ul>
@@ -397,53 +301,22 @@
 		</table>
 	</div>
 	<!--景點路線-->
-	<div id="contactUs-ab">
-		<div id="countrySelection-ab">
-			<div id="countrySelection-wrapper-ab">
-				<ul id="countrySelection-items-ab" style="">
-					<li class="countrySelection-item active">
-						<a href="#">大寮</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">鳳山國中</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">大東</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">鳳山</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">鳳山西(高雄市議會)</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">衛武營</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">技擊館</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">五塊厝</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">文化中心</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">信義國小</a>
-					</li>
-					<li class="countrySelection-item">
-						<a href="#">美麗島</a>
-					</li>
-				</ul>
-				<div class="countrySelection-paddles">
-					<button class="countrySelection-paddle-left icon-chevronleft" aria-hidden="true">
-					</button>
-					<button class="countrySelection-paddle-right icon-chevronright" aria-hidden="true">
-					</button>
+	<div data-role="content">
+		<br>
+		<div class="contactUs">
+			<div class="countrySelection">
+				<div class="countrySelection-wrapper">
+					<ul id="countrySelection-items" class="countrySelection-items" style="">
+					</ul>
 				</div>
 			</div>
 		</div>
+		<!-- 相片 -->
+		<div>
+			<ul id="gallery-container" style="width:100%;"></ul>
+		</div>
 	</div>
+
 	<script>
 		$(document).ready(function() {
 
@@ -586,5 +459,145 @@
 		</form>
 	</div>
 </div>
+
+<!--朋友檔案-->
+<div data-role="page" id="friends_pro">
+	<div data-role="header" data-position="fixed">
+		<table>   <!--改-->
+			<td align="center"><li onclick="$( myPanel ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
+			<td align="center"><b><h4>Crazy Bee</h4></b></td>
+			<td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
+		</table>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<td width="25%"><img id="friend_personpicture" src="jquery-mobile/images/girl.png" class="img_pro" width="80px" ></td>
+				<td align="center">
+					<div><img src="jquery-mobile/images/group.png" class="icon_pro" width="40%"/><p id="friend_fans" style="font-size:16px;">0</p></div>
+				</td>
+				<td align="center">
+					<div><img src="jquery-mobile/images/album.png" class="icon_pro" width="40%"/><p id="friend_albumnum" style="font-size:16px;">0</p></div>
+				</td>
+				<td align="center">
+					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p id="friend_likealbum" style="font-size:16px;">0</p></div>
+				</td>
+			</tr>
+			<tr>
+				<td><div id="firend_proname" class="proname">陳小菊</div></td>
+				<td colspan="3" align="center" width="50%"><button class="w3-btn w3-theme-d1 w3-margin-bottom followbtn">FOLLOW</button></td>
+			</tr>
+		</table>
+	</div>
+	<div class="w3-row">
+		<table>
+			<td><a href="#" onclick="openCity(event, 'friends_Album');">
+				<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Album</div>
+			</a></td>
+
+			<td><a href="#" onclick="openCity(event, 'friends_Route');">
+				<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Save Route</div>
+			</a></td>
+		</table>
+	</div>
+	<!--相簿-->
+	<div id="friends_Album" class="w3-container city"></div>
+
+	<!--朋友收藏的路線-->
+	<div id="friends_Route" class="w3-container city" align="center">
+		<div class="route">
+			<b>*高雄知性之旅*</b>
+		</div>
+
+		<div class="route">
+			<b>*台南知性之旅*</b>
+		</div>
+
+		<div class="route">
+			<b>*屏東知性之旅*</b>
+		</div>
+
+		<div class="route">
+			<b>*屏東知性之旅*</b>
+		</div>
+
+		<div class="route">
+			<b>*屏東知性之旅*</b>
+		</div>
+
+		<div class="route">
+			<b>*屏東知性之旅*</b>
+		</div>
+	</div>
+
+	<script>
+			function openCity(evt, cityName) {
+			var i, x, tablinks;
+			x = document.getElementsByClassName("city");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablink");
+			for (i = 0; i < x.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
+			}
+			document.getElementById(cityName).style.display = "block";
+			evt.currentTarget.firstElementChild.className += " w3-border-red";
+			}
+	</script>
+	<!--<script>
+    //預設顯示第一個tab
+        var _showTab = 0;
+        var $defaultLi = $('ul.tabs li').eq(_showTab).addClass('active');
+        $($defaultLi.find('a').attr('href')).siblings().hide();
+    </script>-->
+	<div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #7a7a7a /*{a-bup-color}*/;">
+		<div data-iconpos="top" data-role="navbar">
+			<ul>
+				<li><a href="#map" id="homemap4" data-icon="custom">地圖</a></li>
+				<li><a href="#photo" id="camera4" data-icon="custom">拍照</a></li>
+				<li><a href="#news" id="newsfeed4" data-icon="custom">動態時報</a></li>
+				<li><a href="#personal" class="ui-btn-active ui-state-persist" id="profile4" data-icon="custom">個人檔案</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!--搜尋頁面-->
+<div data-role="page" id="searchpage">
+	<div>
+		<form><input type="text" name="search" placeholder="Search Friends.."></form>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Points</th>
+			</tr>
+			<tr>
+				<td>Peter</td>
+				<td>Griffin</td>
+				<td>$100</td>
+			</tr>
+			<tr>
+				<td>Lois</td>
+				<td>Griffin</td>
+				<td>$150</td>
+			</tr>
+			<tr>
+				<td>Joe</td>
+				<td>Swanson</td>
+				<td>$300</td>
+			</tr>
+			<tr>
+				<td>Cleveland</td>
+				<td>Brown</td>
+				<td>$250</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
 </body>
 </html>

@@ -4,31 +4,37 @@
 	mysql_select_db("bee");//選擇資料庫
 	mysql_query("set names utf8");//以utf8讀取資料，讓資料可以讀取中文
 	date_default_timezone_set("Asia/Taipei");
-	$userid = $_POST['id'];
-	$postattraction = $_POST['postattraction'];
-	$posttext = $_POST['posttext'];
-	$pid = $_POST['pid'];
+	// $userid = $_POST['id'];
+	// $postattraction = $_POST['postattraction'];
+	// $posttext = $_POST['posttext'];
+	// $pid = $_POST['pid'];
+	
+	
 	// $friendlist = get_friend_data();
 	// $num = count($friendlist);
-	// $userid = 3;
-	// $postattraction = '溫暖的家';
-	// $posttext = '好爽阿~~~';
-	// $pid = 73;
+	$userid = 3;
+	$postattraction = '國立嘉義大學新民校區';
+	$posttext = '專題發表大家加油';
+	$pid = 73;
+	
+	$message = "彭冠程 對你的相片進行留言";
 	$title="一窩蜂";
 	$additionalData = $pid;
 	$ridlist = array();
-	$friendlist = get_friend_data();
-	if($friendlist!=0){
-		$num = count($friendlist);
-		$data = mysql_query("SELECT `name` FROM `user` WHERE `user_id`= ".$userid."");
-		$name=mysql_fetch_row($data);
-		$message = $name[0]." 在 ".$postattraction." 發布貼文";
-		set_rid();
-		sendPush($title,$message);
-		echo json_encode("1");
-	}
-	else
-		echo json_encode("0");
+	$ridlist[0] = 'cUuI76IR71s:APA91bG_HX2HRzg0c7XiTXUfl4zndcdQJpHeVRTeWcYT4Mqs03gK0hbpORmYfaQTK81gHvz90MiFd4wODsxsN_oRGGmuyT_90IK_JcpZbkPI3ZYgT2OvdaevWXT6sr7Z9te6nt4zgzyt';
+	//$friendlist = get_friend_data();
+	sendPush($title,$message);
+	// if($friendlist!=0){
+		// $num = count($friendlist);
+		// $data = mysql_query("SELECT `name` FROM `user` WHERE `user_id`= ".$userid."");
+		// $name=mysql_fetch_row($data);
+		// $message = $name[0]." 在 ".$postattraction." 發布貼文";
+		// set_rid();
+		// sendPush($title,$message);
+		// echo json_encode("1");
+	// }
+	// else
+		// echo json_encode("0");
 	function set_rid(){
 		global $ridlist,$friendlist,$num;
 		$j = 0;
@@ -91,7 +97,7 @@
 	'add' => $additionalData,
 	'vibrate' => 1,
 	'sound' => 1,
-	'image' => '127.0.0.1/img/bee.png'
+	'image' => 'http://bee.japanwest.cloudapp.azure.com//img/bee.png'
 
 	// you can also add images, additionalData
 	);

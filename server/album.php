@@ -5,60 +5,9 @@ mysql_connect("127.0.0.1","root","");//連結伺服器
 mysql_select_db("bee");//選擇資料庫
 mysql_query("set names utf8");//以utf8讀取資料，讓資料可以讀取中文
 
-//$userid = $_POST["id"];
-$userid = 2;
+$userid = $_POST["id"];
+//$userid = 2;
 get_news_data();
-
-
-function get_friend_data(){
-	
-	
-	
-	
-	//抓取該使用者的第一個好友頁面,再透過next的欄位是否有值判斷是否還有下一個好友介面
-	$getfirstfriend = mysql_query("SELECT * FROM `friends` WHERE (`user_id`={$_POST["user_id"]} AND `firstid`=1)");
-	
-	//判斷這個人有沒有好友
-	if(mysql_num_rows($getfirstfriend)==0){
-		return 0;
-	}
-	else{
-	$friendlist = array(); //儲存所有的好友USER_ID
-	for($k=1;$k<=mysql_num_rows($getfirstfriend);$k++){ 
-		$rs=mysql_fetch_row($getfirstfriend);
-		$check = $rs[2];
-		for($j=1;$j<=50;$j++){
-			if ($rs[3+$j]==NULL) break;
-			$friendlist[$j-1] = $rs[3+$j];
-		}
-	}
-	
-	
-	if($check!=0){
-		$time = 1;
-		
-		do{
-			$getfriend = mysql_query("SELECT * FROM `friends` WHERE `id`=".$check."");
-			
-			for($k=1;$k<=mysql_num_rows($getfriend);$k++){ 
-				$rs=mysql_fetch_row($getfriend);
-				$check = $rs[2];
-				for($j=1+($time*50);$j<=50+($time*50);$j++){
-					if ($rs[3+$j-($time*50)]==NULL) break;
-					$friendlist[$j-1] = $rs[3+$j-($time*50)];
-				}
-			}
-			
-			$time++;
-			
-		}while($check!=0);
-	}
-	
-	//取得的friendlist會得到使用者的所有好友
-	return ($friendlist);
-	//echo json_encode($friendlist);
-	}
-}
 
 function get_news_data(){
 	global $userid;
@@ -77,10 +26,11 @@ function get_news_data(){
 		//echo mysql_num_rows($getalbum)." ".count($friendlist)."  77\n";//test
 		for($b=1;$b<=mysql_num_rows($getalbum);$b++){
 			$rs=mysql_fetch_row($getalbum);
-			$albumdata[$num]["user"] = array("0" => $rs[2]);  //取得album創建人的id
+			$albumdata[$num]["user"] = array("0" => $rs[2],"name" => $rs[1]);  //取得album創建人的id
 			$albumdata[$num]["date"] = $rs[3];                //取得album的最新日期
 			$albumdata[$num]["id"] = $rs[0];                  //取得album的id
 			$albumdata[$num]["next"] = $rs[7];                //判斷是否有下一本相簿
+			//$albumdata[$num]["albumname"] = $rs[2];
 			for($c=1;$c<=30;$c++){
 				if($rs[$c+7]!=null){
 					$albumdata[$num][$c]= array("0" => $rs[$c+7]);   //把30個相片id放入陣列中 
@@ -167,7 +117,9 @@ function get_news_data(){
 			}	
 		}
 	}
-	
+	$getmsguserdata = mysql_query("SELECT * FROM `user` WHERE `user_id`=".$userid."");
+	$userdata = mysql_fetch_array($getmsguserdata);
+	$userdata['fansnum'] = get_fansnum();
 	//把每個景點的路線彙整起來(修改中)
 	$temptdata = array();
 	$routedata = array();
@@ -195,8 +147,12 @@ function get_news_data(){
 		$routedata[$num-$a] = $routedata[$a];
 		$routedata[$a] = $tmp;
 	}
-	
-
+	for($a=0;$a<count($routedata);$a++){
+		$routedata[$a]=array_unique($routedata[$a]);
+	}	
+	for($a=0;$a<count($routedata);$a++){
+		$routedata[$a] = array_values($routedata[$a]);
+	}
 	
 	//把各個album依照時間排序
 	usort($albumdata, 'sort_by_date');
@@ -206,7 +162,7 @@ function get_news_data(){
 	$data['albumdata'] = $albumdata;
 	$data['message'] = $message;
 	$data['routedata']= $routedata;
-		
+	$data['userdata'] = $userdata;	
 	//將陣列編碼成 JSON 字串
 	echo json_encode($data);
 	
@@ -311,5 +267,17 @@ function get_news_data(){
 	}while($num<$time);
 	
 		return array($y1,$m1,$d1,$h1,$i1,$s1,$Y1,$M1,$D1,$H1,$I1,$S1);
+	}
+	function get_fansnum(){
+		global $userid;
+		$getalbum = mysql_query("SELECT * FROM `friends`");
+		$vansnum = 0;
+		while($rs=mysql_fetch_array($getalbum)){
+			for($i=1;$i<50;$i++){
+				if($rs[$i] == $userid)
+					$vansnum++;
+			}
+		}
+		return $vansnum;
 	}
 ?>
