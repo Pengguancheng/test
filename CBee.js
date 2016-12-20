@@ -169,7 +169,7 @@ function senddata(data,len){
 function fbrd(){
 	//polling();
 	get_attraction();
-	setInterval("polling();", 5000);
+	setInterval("polling();", 1000);
 	push = PushNotification.init({ "android": {"senderID": "1080112310883","icon": "icon.png"}});
 	setgcm();
 	setInterval(function(){
@@ -181,10 +181,11 @@ function fbrd(){
 			actmarker.pop();
 			actnum++;
 		}
-	}, 5000);
+	},3000);
     $.mobile.changePage('#map');	
 }
 function mapreload(){
+	$.mobile.changePage('#map');
 	markers.length = 0;
 	markerCluster.length = 0;	
 	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);//test
@@ -224,7 +225,7 @@ function setgcm(){
 	push.on('notification', function(data) {
 		console.log(JSON.stringify(data));		 
 		//alert(data.additionalData.add);
-		$.mobile.changePage('#news_picture');
+		//$.mobile.changePage('#news_picture');
 		news_picture_load(id);
 	});
 	push.on('error', function(e) {
@@ -306,7 +307,7 @@ function polling(){
 				}	
 			},
 			error: function(jqXHR) {
-			alert("polling發生錯誤: " + jqXHR.status);
+			console.log("polling發生錯誤: " + jqXHR.status);
 		},
 	})
 }
@@ -397,12 +398,17 @@ function clickmarker(val){
         },
 
         success: function(data){
+			$.mobile.changePage('#Attractions');
+			//alert(data.picture_id);
             console.log(JSON.stringify(data));
+			var attpurl = "http://bee.japanwest.cloudapp.azure.com//img/"+data.picture_id; 
             $("#titlename").html(data.attraction_name);
+			$("attroutetitle").html(data.attraction_name);
             $("#attraction").html(data.description);
             $("#addr").html(data.address);
             $("#phone").html(data.telephone);
             $("#time").html(data.businesshour);
+			$("#attimg").attr({"src":attpurl});
 			$("#goroute").html("<p id='changer' onclick='goroute("+val+")' style=''>路線</p>")
         },
         error: function(jqXHR) {
@@ -418,7 +424,7 @@ function autocomp(){
 	success: function(data){
 		console.log(data);
 			$( function() {
-			$( "#postattraction" ).autocomplete({
+			$( "#searchatt" ).autocomplete({
 				source: data
 			});
 		});
@@ -438,11 +444,15 @@ function goroute(id){
         },
         success: function(data){
 			likealbum =data;
-			$.mobile.changePage('#attroute');
 			$("#routelist").empty();
             console.log(data);
+			if(data.albumdata == null){
+				alert('此景點未包含路線');
+			}
+			else{
+			$.mobile.changePage('#attroute');
 			for(i=0;i<data.albumdata.length;i++){
-				alert(i);
+				//alert(i);
 				var j = i%2;
 				if(j==0){
 					var rname = "<tr style='background-color:#baeeee;'onclick='like_route("+i+");'><td align='center' width='5%'>"+(i+1)+"</td><td width='70%'>"+data.albumdata[i].user.name+"</td></tr>";
@@ -452,7 +462,7 @@ function goroute(id){
 					var rname="<tr onclick='like_route("+i+");'><td align='center' width='5%'>"+i+"</td><td width='70%'>"+data.albumdata[i].user.name+"</td></tr>";
 					$("#routelist").append(rname);
 				}
-			}
+			}}
         },
         error: function(jqXHR){
             alert("goroute發生錯誤: " + jqXHR.status);
@@ -636,13 +646,13 @@ function changeatt(num,alnum){
 		if(album.albumdata[alnum][i] == null)
 		break;
 		if((album.albumdata[alnum][i][4] != null) && (album.routedata[alnum][num] == album.albumdata[alnum][i][3])){
-			var purl =  "<li><img src='http://bee.japanwest.cloudapp.azure.com/img/"+album.albumdata[alnum][i][4]+"' /></li>"
+			var purl =  "<li><img onclick='news_picture_load("+album.albumdata[alnum][i]['pid']+");' src='http://bee.japanwest.cloudapp.azure.com/img/"+album.albumdata[alnum][i][4]+"' /></li>"
 			$('#gallery-container').append(purl);
 		}
 		i++;			
 	}
 		$('#gallery-container').snapGallery({
-			minWidth: 3,
+			minWidth: 100,
 			maxCols: 3,
 			margin: 10
 		});
@@ -662,6 +672,7 @@ function getalbum(){
 			$("#albumnum").text(album.albumdata.length);
 			set_album();
 			getlikealbum();
+			openCity(event, 'Album');
 		},
 		error: function(jqXHR) {
 		  console.log(jqXHR.status);
@@ -672,24 +683,25 @@ function getalbum(){
 function set_album(){
 	$('#Album').empty();
 	for(i=0;i<album.routedata.length;i++){
-		var rname = "<div class='alb' onclick='picture_route("+i+")'><img src='jquery-mobile/images/river_101.jpg' width='300' height='200'><div class='desc'>~"+album.albumdata[i].user.name+"~</div></div>" 
+		var rname = "<div class='alb' onclick='picture_route("+i+")'><img src='http://bee.japanwest.cloudapp.azure.com//img/"+album.albumdata[i][1][4]+"' width='300' height='200'><div class='desc'>~"+album.albumdata[i].user.name+"~</div></div>" 
 		$('#Album').append(rname);
 	}	
 }
 function picture_route(num){	
-	$('#countrySelection-items').empty();
 	$.mobile.changePage('#Album_route');
+	$('#countrySelection-items').empty();
+	$('#album_title').text(album.albumdata[num].user.name);
+	$("#savelike").html("<li onclick='savealbum("+num+")' class='w3-hide-large fa fa-heart' style='font-size:18px;'>收藏路線</li>");
 	for(i=0;i<album.routedata[num].length;i++){
 		var rname = "<li class='countrySelection-item'><a onclick='changeatt("+i+","+num+");' href='#'>"+album.routedata[num][i]+"</a></li>" 
 		$('#countrySelection-items').append(rname);
 	}	
 	routeset('countrySelection-items');	
-	for(i=0;i<album.routedata[num].length;i++){
-		changeatt(i,num);
-	}
-	changeatt(0,num);	
+
 }
 function friend_getalbum(uid){
+	$.mobile.changePage('#friends_pro');
+	//alert(uid);
 	$.ajax({
 		url: "http://bee.japanwest.cloudapp.azure.com//album.php",
 		type:"POST",
@@ -700,10 +712,13 @@ function friend_getalbum(uid){
 		success: function(data){
 			console.log(JSON.stringify(data));
 			friend_album = data;
-			$("#firend_proname").html(friend_album.userdata.name);
-			$("#friend_personpicture").attr({"src":userpurl});
-			$("#friend_fans").text(friend_album.userdata.fansnum);
-			$("#friend_albumnum").text(friend_album.albumdata.length);
+			$("#friend_personpicture").attr({"src":"jquery-mobile/images/boy.png"});
+			if(friend_album.userdata != null){
+				$("#firend_proname").html(friend_album.userdata.name);
+				$("#friend_personpicture").attr({"src":friend_album.userdata.userpurl});
+				$("#friend_fans").text(friend_album.userdata.fansnum);
+				$("#friend_albumnum").text(friend_album.albumdata.length);
+			}
 			friend_set_album();
 		},
 		error: function(jqXHR) {
@@ -713,15 +728,18 @@ function friend_getalbum(uid){
 	});	
 }
 function friend_set_album(){
+	//alert(friend_album.routedata.length);
 	$('#friends_Album').empty();
 	for(i=0;i<friend_album.routedata.length;i++){
-		var rname = "<div class='alb' onclick='friend_picture_route("+i+")'><img src='jquery-mobile/images/river_101.jpg' width='300' height='200'><div class='desc'>~"+friend_album.albumdata[i].user.name+"~</div></div>" 
+		var rname = "<div class='alb' onclick='friend_picture_route("+i+")'><img src='http://bee.japanwest.cloudapp.azure.com//img/"+friend_album.albumdata[i][1][4]+"' width='300' height='200'><div class='desc'>~"+friend_album.albumdata[i].user.name+"~</div></div>" 
 		$('#friends_Album').append(rname);
 	}	
 }
 function friend_picture_route(num){	
 	$('#countrySelection-items').empty();
-	$.mobile.changePage('#Album_route');
+	$.mobile.changePage('#Album_route');		
+	$('#album_title').text(friend_album.albumdata[num].user.name);//savealbum("+num+")
+	$("#savelike").html("<li onclick='savealbum("+num+")' class='w3-hide-large fa fa-heart' style='font-size:18px;'>收藏路線</li>");
 	for(i=0;i<friend_album.routedata[num].length;i++){
 		var rname = "<li class='countrySelection-item'><a onclick='friend_changeatt("+i+","+num+");' href='#'>"+friend_album.routedata[num][i]+"</a></li>" 
 		$('#countrySelection-items').append(rname);
@@ -736,13 +754,13 @@ function friend_changeatt(num,alnum){
 		if(friend_album.albumdata[alnum][i] == null)
 		break;
 		if((friend_album.albumdata[alnum][i][4] != null) && (friend_album.routedata[alnum][num] == friend_album.albumdata[alnum][i][3])){
-			var purl =  "<li><img src='http://bee.japanwest.cloudapp.azure.com/img/"+friend_album.albumdata[alnum][i][4]+"' /></li>"
+			var purl =  "<li><img onclick='news_picture_load("+friend_album.albumdata[alnum][i]['pid']+");' src='http://bee.japanwest.cloudapp.azure.com/img/"+friend_album.albumdata[alnum][i][4]+"' /></li>"
 			$('#gallery-container').append(purl);
 		}
 		i++;			
 	}
 		$('#gallery-container').snapGallery({
-			minWidth: 3,
+			minWidth: 100,
 			maxCols: 3,
 			margin: 10
 		});
@@ -779,9 +797,11 @@ function getlikealbum(){
 }
 function like_route(num){	
 	$('#countrySelection-items').empty();
-	$.mobile.changePage('#Album_route');
+	$.mobile.changePage('#Album_route');	
+	$('#album_title').text(likealbum.albumdata[num].user.name);
+	$("#savelike").html("<li onclick='savealbum("+num+")' class='w3-hide-large fa fa-heart' style='font-size:18px;'>收藏路線</li>");
 	for(i=0;i<likealbum.routedata[num].length;i++){
-		var rname = "<li class='countrySelection-item'><a onclick='like_changeatt("+i+","+num+");' href='#'>"+likealbum.routedata[num][i]+"</a></li>" 
+		var rname = "<li class='countrySelection-item'><a onclick='like_changeatt("+i+","+num+");'>"+likealbum.routedata[num][i]+"</a></li>" 
 		$('#countrySelection-items').append(rname);
 	}	
 	routeset('countrySelection-items');
@@ -792,31 +812,32 @@ function like_changeatt(num,alnum){
 	while(1){
 		if(likealbum.albumdata[alnum][i] == null)
 		break;
-		if((likealbum.albumdata[alnum][i][4] != null) && (likealbum.routedata[alnum][num] == likealbum.albumdata[alnum][i][3])){
-			var purl =  "<li><img src='http://bee.japanwest.cloudapp.azure.com/img/"+likealbum.albumdata[alnum][i][4]+"' /></li>"
+		if((likealbum.albumdata[alnum][i][4] != null) && (likealbum.routedata[alnum+1][(num)] == likealbum.albumdata[alnum][i][3])){
+			
+			var purl =  "<li><img onclick='news_picture_load("+likealbum.albumdata[alnum][i]['pid']+");' src='http://bee.japanwest.cloudapp.azure.com/img/"+likealbum.albumdata[alnum][i][4]+"' /></li>"
 			$('#gallery-container').append(purl);
 		}
 		i++;			
 	}
 		$('#gallery-container').snapGallery({
-			minWidth: 3,
+			minWidth: 100,
 			maxCols: 3,
 			margin: 10
 		});
 	
 }
 function getsearchdata(){
+$('#searchtable').empty();
 $.ajax({
 	url: "http://bee.japanwest.cloudapp.azure.com//get_follower_data.php",
 	type:"POST",
 	dataType:'JSON',
 	data:{
 		search:$("#search_id").val(),
-		user_id: 3,
+		user_id: userid,
 	},
-
-
 	success: function(getdata){
+		$.mobile.changePage('#searchpage');
 		$('#searchtable').empty();
 		console.log(getdata);
 		var friendlist = getdata['friendlist'];
@@ -838,7 +859,7 @@ $.ajax({
 		else{
 			for(var i = 0; i < jsonNum; i++){
 				if(check_same(i)==1){
-					var text2="<tr id='tr"+i+"'><td align='center' width='10%' onclick='$.mobile.changePage('#friends_pro');'><img src='"+searchdata[i+1]["purl"]+"' width='40px' /></td><td width='80%' onclick='$.mobile.changePage('#friends_pro');'>"+searchdata[i+1]["name"]+"</td><td width='10%'><button id='follow"+(i+1)+"'>FOLLOWED</button></td></tr>";
+					var text2="<tr style='background-color:#baeeee;' id='tr"+i+"'><td align='center' width='10%' onclick='$.mobile.changePage('#friends_pro');'><img src='"+searchdata[i+1]["purl"]+"' width='40px' /></td><td width='80%' onclick='$.mobile.changePage('#friends_pro');'>"+searchdata[i+1]["name"]+"</td><td width='10%'><button id='follow"+(i+1)+"'>FOLLOWED</button></td></tr>";
 					$("#searchtable").append(text2);
 				}
 				else{
@@ -889,6 +910,44 @@ $.ajax({
 	},
 });	
 }
+function getfriendlist(){
+$.ajax({
+	url: "http://bee.japanwest.cloudapp.azure.com//friendlist.php",
+	type:"POST",
+	dataType:'JSON',
+	data:{
+		id: userid,
+	},
+	success: function(getdata){
+		$.mobile.changePage('#searchpage');
+		$('#searchtable').empty();
+		console.log(getdata);
+		var friendlist = getdata;
+		
+		if(friendlist.length <= 0){
+			alert("查無資料!!");
+		}
+		else{
+			for(var i = 0; i < friendlist.length; i++){
+				if(i%2==1){
+					var text2="<tr id='tr"+i+"'><td align='center' width='10%'><img src='"+friendlist[i]["purl"]+"' width='40px' /></td><td width='80%'onclick='friend_getalbum("+friendlist[i]['user_id']+");'>"+friendlist[i]["name"]+"</td></tr>";
+					$("#searchtable").append(text2);
+				}
+				else{
+					var text3="<tr id='tr"+i+"'><td align='center' width='10%''><img src='"+friendlist[i]["purl"]+"' width='40px' /></td><td width='80%'onclick='friend_getalbum("+friendlist[i]['user_id']+");'>"+friendlist[i]["name"]+"</td></tr>";
+						$("#searchtable").append(text3);
+				}
+			}
+		}
+
+	},
+
+	error: function(jqXHR) {
+		console.log(JSON.stringify(jqXHR));
+		alert("發生錯誤: " + jqXHR.status);
+	},
+});	
+}
 function news_laod(){
 //$.mobile.changePage('#news');
 $.ajax({
@@ -899,8 +958,6 @@ $.ajax({
 		user_id:userid,
 		time:1,
 	},
-
-
 	success: function(getdata){
 			$("#newblock").empty();
 			var time = '1';
@@ -930,26 +987,28 @@ $.ajax({
 			
 			for (var i = 0; i < jsonNum; i++) {
 				//動態產生整篇貼文
-				var txt="<div class='card w3-round w3-container' id='showBlock"+time+i+"'><div><br><table><tr><td width='20%'><img class='w3-left w3-circle w3-margin-right' src='"+data[i]["user"][3]+"' style='width:100%;' align='center'/></td><td width='30%' align='left'><h4><b>"+data[i]["user"][1]+"</b></h4></td><td class='w3-right w3-opacity'><span>"+data[i]["time"]+"</span></td></tr></table><hr class='w3-clear'></div><br><br><div class='contactUs'><div class='countrySelection'><div class='countrySelection-wrapper'><ul id='countrySelection-items"+time+i+"'class='countrySelection-items' style=''></ul></div></div></div><br><div id='Glide"+time+i+"' class='glide'><div class='glide__wrapper'><ul style='padding-left:0;' class='glide__track' id='ul"+time+i+"'></ul></div></div><div class='container'><br><table><td><button id='like"+time+i+"' type='button' class='w3-btn w3-theme-d1 w3-margin-bottom'><i class='fa fa-heart'></i>  Like</button></td><td><button id='save"+time+i+"' type='button' class='w3-btn w3-theme-d2 w3-margin-bottom'><i class='fa fa-comment'></i>  SAVE</button></td></table></div></div><br>";
+				var txt="<div class='card w3-round w3-container' style='background-color: rgba(204, 204, 255, 0.1);' id='showBlock"+time+i+"'><div><br><table><tr><td width='20%'><img class='w3-left w3-circle w3-margin-right' src='"+data[i]["user"][3]+"' style='width:100%;' align='center'/></td><td width='30%' align='left'><h4><b>"+data[i]["user"][1]+"</b></h4></td><td class='w3-right w3-opacity'><span>"+data[i]["time"]+"</span></td></tr></table></div><br><br><div class='contactUs'><div class='countrySelection'><div class='countrySelection-wrapper'><ul id='countrySelection-items"+time+i+"'class='countrySelection-items' style=''></ul></div></div></div><div id='Glide"+time+i+"' class='glide'><div class='glide__wrapper'><ul style='padding-left:0;' class='glide__track' id='ul"+time+i+"'></ul></div></div><div align='center'><br><table><td><button id='like"+time+i+"' type='button' class='w3-btn w3-theme-d1 w3-margin-bottom'style='border-radius:5px;'><i class='fa fa-heart'></i>  Like Album</button></td><td><button id='save"+time+i+"' type='button' class='w3-btn w3-theme-d2 w3-margin-bottom'style='border-radius:5px;'><i class='fa fa-check'></i>  Save Route</button></td></table></div></div><br>";
 				$("#newblock").append(txt);
 				var data1 = data[i];
 				var jsonnum = getLength(data1);
+				var rowdata = getLength(route);
 				for(var j = 0; j < jsonnum-5; j++){
 					//動態產生照片
-					var text="<li id='li"+time+" "+i+" "+j+"' class='glide__slide'><p>"+data[i][j+1][1]+"</p><br><img src='http://bee.japanwest.cloudapp.azure.com/img/"+data[i][j+1][4]+"' alt='montain' style='width:100%' onclick="+data[i][j+1][0]+"></li>";
+					var text="<li id='li"+time+" "+i+" "+j+"' class='glide__slide'><p>"+data[i][j+1][1]+"</p><br><img src='http://bee.japanwest.cloudapp.azure.com/img/"+data[i][j+1][4]+"' style='width:100%;height: 300px;border:none;' onclick="+data[i][j+1][0]+"></li>";
 					$("#ul"+time+i).append(text);
 					
 					var num = getLength(msg[i][j+1]);
 					if(num>=2){
 						//動態產生留言
-						var text1="<div><img src='"+msg[i][j+1][3]+"'><br><p>name: "+msg[i][j+1][2]+"</p><br><p>"+msg[i][j+1][4]+"</p></div><div><img src='http://bee.japanwest.cloudapp.azure.com//"+msg[i][j+1][3]+"'><br><p>name: "+msg[i][j+1][6]+"</p><br><p>"+msg[i][j+1][8]+"</p></div>";
+						var text1="<div><table><tr><td><img src='"+msg[i][j+1][3]+"'><br><p>"+msg[i][j+1][2]+"</p></td><td><p>"+msg[i][j+1][4]+"</p></td></table></div><div><table><td><img src='http://bee.japanwest.cloudapp.azure.com//"+msg[i][j+1][3]+"'><br><p>"+msg[i][j+1][6]+"</p></td><td><p>"+msg[i][j+1][8]+"</p></td></table></div>";
 						$("#li"+time+" "+i+" "+j).append(text1);
 					}
 				}
-				for(var j = 0; j < jsonnum-5; j++){
+				for(var j = 0; j < rowdata; j++){
 					//動態產生路線
+					if(route[i]!=null){
 					var text2="<li id='rd"+time+i+" "+j+"' class='countrySelection-item'><a href='#'>"+route[i][j]+"</a></li>";
-					$("#countrySelection-items"+time+i).append(text2);
+					$("#countrySelection-items"+time+i).append(text2);}
 				}
 				routeset("countrySelection-items"+time+i);
 			}
@@ -1085,6 +1144,7 @@ $.ajax({
 
 	error: function(jqXHR) {
 			alert("發生錯誤931: " + jqXHR.status);
+			console.log("發生錯誤931: " + JSON.stringify(jqXHR));
 		},
 	})	
 }
@@ -1132,13 +1192,13 @@ function new_data() {
 				var jsonnum = getLength(data1);
 				for(var j = 0; j < jsonnum-5; j++){
 					//動態產生照片
-					var text="<li id='li"+time+i+j+"' class='glide__slide'><p>"+data[i][j+1][1]+"</p><br><img src='http://bee.japanwest.cloudapp.azure.com/img/"+data[i][j+1][4]+"' alt='montain' style='width:100%' onclick="+data[i][j+1][0]+"></li>";
+					var text="<li id='li"+time+i+j+"' class='glide__slide'><p>"+data[i][j+1][1]+"</p><br><img src='http://bee.japanwest.cloudapp.azure.com/img/"+data[i][j+1][4]+"' style='width:100%' onclick="+data[i][j+1][0]+"></li>";
 					$("#ul"+time+i).append(text);
 					
 					var num = getLength(msg[i][j+1]);
 					if(num>=2){
 						//動態產生留言
-						var text1="<div><img src='"+msg[i][j+1][3]+"'><br><p>name: "+msg[i][j+1][2]+"</p><br><p>"+msg[i][j+1][4]+"</p></div><div><img src='http://bee.japanwest.cloudapp.azure.com//"+msg[i][j+1][3]+"'><br><p>name: "+msg[i][j+1][6]+"</p><br><p>"+msg[i][j+1][8]+"</p></div>";
+						var text1="<div><img src='"+msg[i][j+1][3]+"'/><p>name: "+msg[i][j+1][2]+"</p><br><p>"+msg[i][j+1][4]+"</p></div><div><img src='http://bee.japanwest.cloudapp.azure.com//"+msg[i][j+1][3]+"'><br><p>name: "+msg[i][j+1][6]+"</p><br><p>"+msg[i][j+1][8]+"</p></div>";
 						$("#li"+time+i+j).append(text1);
 					}
 				}
@@ -1272,6 +1332,7 @@ function new_data() {
 	})	
 }
 function news_picture_load(pid){
+	$.mobile.changePage('#news_picture');
 $.ajax({
 	url: "http://bee.japanwest.cloudapp.azure.com//get_picture_data.php",
 	type:"POST",
@@ -1300,7 +1361,7 @@ $.ajax({
 		
 		console.log(jsonNum);
 		
-		var txt1="<div class='card w3-round w3-container' id='showBlock'><div><br><table><tr><td width='20%'><img class='w3-left w3-circle w3-margin-right' src='"+picdata["user"][3]+"' style='width:100%;' align='center'/></td><td width='30%' align='left'><h4><b>"+picdata["user"][1]+"</b></h4></td><td class='w3-right w3-opacity'><span></span></td></tr></table><hr class='w3-clear'></div><br><div id='pic'><p>"+picdata["context"]+"</p><br><img src='http://bee.japanwest.cloudapp.azure.com/img/"+picdata["purl"]+"' alt='montain' style='width:100%'><hr class='w3-clear'><div id='msg'></div></div><div class='container'><div id='picmsg"+i+"'><img src='"+user[3]+"'><br><p>name: "+user[1]+"</p><br><input type='text' id='leave_massage'><button id='message_context'>留言</button></div><br></div></div>";
+		var txt1="<div class='card w3-round w3-container'style='background-color: rgba(204, 204, 255, 0.1);' id='showBlock'><div><br><table><tr><td width='20%'><img class='w3-left w3-circle w3-margin-right' src='"+picdata["user"][3]+"' style='width:100%;' align='center'/></td><td width='30%' align='left'><h4><b>"+picdata["user"][1]+"</b></h4></td><td class='w3-right w3-opacity'></td></tr></table><hr class='w3-clear'></div><br><div id='pic'><p>"+picdata["context"]+"</p><br><img src='http://bee.japanwest.cloudapp.azure.com/img/"+picdata["purl"]+"' style='width:100%'><hr class='w3-clear'><div id='msg'></div></div><div><div id='picmsg"+i+"'><table><td><img src='"+user[3]+"' class='w3-margin-bottom'/></td><td><input class='w3-margin-bottom' type='text' id='leave_massage'/></td><td><button class='w3-btn w3-theme-d2 w3-margin-bottom'style='border-radius:5px;' id='message_context'>留言</button></td></table></div></div></div>";
 		$("#newpicblock").append(txt1);
 		
 		if(jsonNum <= 0){
@@ -1309,7 +1370,7 @@ $.ajax({
 		}
 		else{
 			for(var i = 0; i < jsonNum; i++){
-				var text2="<div id='picmsg"+i+"'><img src='"+msg[i+1][4]+"'><br><p>name: "+msg[i+1][1]+"</p><br><p>"+msg[i+1][3]+"</p></div>";
+				var text2="<div id='picmsg"+i+"'><table><tr><td align='center' width='5%'><img src='"+msg[i+1][4]+"'></td><td><p>"+msg[i+1][3]+"</p></td><tr><td rowspan='2'><p>"+msg[i+1][1]+"</p></td></tr></table></div>";
 				$("#msg").append(text2);
 			}
 		}
@@ -1332,8 +1393,8 @@ $.ajax({
 
 
 			success: function(getdata){
-				//console.log(getdata);
-				var text3 = "<div id='picmsg"+(jsonNum+num)+"'><img src='"+getdata[3]+"'><br><p>name: "+getdata[1]+"</p><br><p>"+getdata[2]+"</p></div>";
+				console.log(getdata);
+				var text3 = "<div id='picmsg"+(jsonNum+num)+"'><table><tr><td width='5%' align='center'><img src='"+getdata[3]+"'/></td><td><p>"+getdata[2]+"</p></td></tr><tr><td rowspan='2'><p>"+getdata[1]+"</p></td></tr></div>";
 				$("#msg").append(text3);
 				num++;
 			},
@@ -1355,20 +1416,19 @@ function gorank(){
 	$.ajax({
 		url: "http://bee.japanwest.cloudapp.azure.com//get_leaderboard_data.php",
 		type:"POST",
-		dataType:'json',
-		
+		dataType:'json',		
 		success: function(data){
 			console.log(data);
 			var txtId = 1;
 			var jsonNum = data.length; //json的長度
 			for (var i = 0; i < jsonNum; i++) {
 				if ((txtId%2)==1){
-					var text1 = "<tr id='div"+ txtId +"' style='background-color:#baeeee;' onclick='$.mobile.changePage('#Attractions');clickmarker("+data[i]["id"]+");'><td align='center' width='10%'>"+ txtId +"</td><td width='75%'>"+data[i]["name"]+"</td><td width='5%'><img src='jquery-mobile/images/hearts.png' width='15px'/></td><td width='10%' align='center'>"+data[i]["likenumber"]+ "</td></tr>";
+					var text1 = "<tr id='div"+ txtId +"' style='background-color:#baeeee;'><td align='center' width='10%'>"+ txtId +"</td><td width='75%' onclick='clickmarker("+data[i]['id']+")'>"+data[i]["name"]+"</td><td width='20%'><img width='100%' src='http://bee.japanwest.cloudapp.azure.com//img/"+data[i]["purl"]+"'/></td></tr>";
 					$("#showBlock").append(text1);
 					txtId++;
 				}
 				else{
-					var text2 = "<tr id='div"+ txtId +"' onclick='$.mobile.changePage('#Attractions');clickmarker("+data[i]["id"]+");'><td align='center' width='10%'>"+ txtId +"</td><td width='75%'>"+data[i]["name"]+"</td><td width='5%'><img src='jquery-mobile/images/hearts.png' width='15px'/></td><td width='10%' align='center'>"+data[i]["likenumber"]+ "</td></tr>";
+					var text2 = "<tr id='div"+ txtId +"'><td align='center' width='10%'>"+ txtId +"</td><td width='75%' onclick='clickmarker("+data[i]['id']+")'>"+data[i]["name"]+"</td><td width='20%'><img  width='100%' src='http://bee.japanwest.cloudapp.azure.com//img/"+data[i]["purl"]+"'/></td></tr>";
 					$("#showBlock").append(text2);
 					txtId++;
 				}
@@ -1379,4 +1439,67 @@ function gorank(){
 			alert("發生錯誤: " + jqXHR.status);
 		},
 	})
+}
+function searchatt(){
+	$('#searchatttable').empty();
+	$.mobile.changePage('#searchattpage');
+	//alert($('#searchatt').val());
+	$.ajax({
+	url: "http://bee.japanwest.cloudapp.azure.com//searchatt.php",
+	type:"POST",
+	dataType:'JSON',	
+	data:{
+		name: $('#searchatt').val(),
+	},
+	success: function(getdata){
+		$('#searchatt').val("");
+		var friendlist = getdata;
+		//console.log(friendlist.length);
+		for(var i = 0; i < friendlist.length-1; i++){
+			var attname = friendlist[i]["attraction_name"];
+			if(i%2==1){
+				var text2="<tr style='background-color:#baeeee;' ><td align='center' width='10%'><img src='http://bee.japanwest.cloudapp.azure.com//img/"+friendlist[i]["picture_id"]+"' width='40px' /></td><td width='80%'id='tr"+i+"'>"+friendlist[i]["attraction_name"]+"</td></tr>";
+				$("#searchatttable").append(text2);
+			}
+			else{
+				var text3="<tr ><td align='center' width='10%''><img src='http://bee.japanwest.cloudapp.azure.com//img/"+friendlist[i]["picture_id"]+"' width='40px' /></td><td width='80%' id='tr"+i+"'>"+friendlist[i]["attraction_name"]+"</td></tr>";
+					$("#searchatttable").append(text3);
+			}
+		}
+		for(var i = 0; i < friendlist.length-1; i++)
+			document.getElementById("tr"+i+"").addEventListener("click",function(){
+				//alert($("#"+this.id).text());//$("#"+this.id.slice(2)).val()
+				$('#postattraction').val($("#"+this.id).text());
+				$.mobile.changePage('#photo');
+			});
+	},
+	error: function(jqXHR) {
+	console.log("searchatt發生錯誤: " + JSON.stringify(jqXHR.status));
+	},
+})
+}
+function savealbum(albumid){
+$.ajax({
+	url: "http://bee.japanwest.cloudapp.azure.com//write_save_album.php",
+	type:"POST",
+	dataType:'text',
+	data:{
+		user_id: userid,
+		album_id: albumid,
+	},
+
+
+	success: function(getdata){
+		if(getdata==1){
+			alert("已經收藏過囉!!");
+		}
+		else{
+			alert("寫入成功!!");
+		}
+	},
+
+	error: function(jqXHR) {
+		alert("發生錯誤:1092 " + jqXHR.status);
+	},
+})
 }

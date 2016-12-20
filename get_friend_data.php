@@ -199,28 +199,15 @@ function get_news_data(){
 	
 	$routedata = array_unique_2d($temptdata);
 	
-	for($a=0;$a<count($routedata);$a++){
-		$routedata[$a] = array_values($routedata[$a]);
+	for($a=1;$a<=count($message);$a++){
+		$routedata[$a-1] = array_values($routedata[$a-1]);
+		$routedata[$a-1]["date"] = $albumdata[$a-1]["date"];
 	}
-	$routedatanum = floor(count($routedata)/2);
-	//echo "routedatanum= ".$routedatanum."\n";
-	$num = count($routedata)-1;
-	//echo "num= ".$num."\n";
-	for($a=0;$a<$routedatanum;$a++){
-		$tmp = $routedata[$num-$a];
-		$routedata[$num-$a] = $routedata[$a];
-		$routedata[$a] = $tmp;
-	}
-	for($a=0;$a<count($routedata);$a++){
-		$routedata[$a]=array_unique($routedata[$a]);
-	}	
-	for($a=0;$a<count($routedata);$a++){
-		$routedata[$a] = array_values($routedata[$a]);
-	}
+
 	
 	//把各個album依照時間排序
 	usort($albumdata, 'sort_by_date');
-	//usort($routedata, 'sort_by_date');
+	usort($routedata, 'sort_by_date');
 	
 	
 	$data = array();

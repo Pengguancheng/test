@@ -19,7 +19,7 @@ function get_news_data(){
 	$num = 0;
 	$albumdata = array();
 	$message = array();	
-	$tmp = mysql_query("SELECT album_id FROM `likealbum` WHERE user_id = ".$userid."");
+	$tmp = mysql_query("SELECT album_id FROM `savealbum` WHERE user_id = ".$userid."");
 	for($i=0;$i<mysql_num_rows($tmp);$i++){
 		$rs = mysql_fetch_row($tmp);
 		$friendlist[$i] = $rs[0];

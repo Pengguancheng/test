@@ -52,26 +52,25 @@
 			<hr>
 		</div>
 		<a href="#rank" style="text-decoration:none;" onclick="gorank();"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
-		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
-		<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
+		 <!-- <a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a> -->
+		<a style="text-decoration:none;" onclick="getfriendlist()"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 	</div>
 	<div data-role="header">
-		<table>   <!--改-->
+		<table>
 			<td align="center"><li onclick="$( '#myPanel' ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			<td align="center"><b><h4>Crazy Bee</h4></b></td>
 			<td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
 		</table>
 	</div>
 	<div data-role="content" id="map-canvas"style="width:100vw; height:100vh;" ></div>
-	<!--改回rank-->
-	<!--<a href="#Attractions"><img src="jquery-mobile/images/cup.png" class="image2" /></a>-->
-	<div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
-		<div data-iconpos="top" data-role="navbar">
+	
+	<div class="iconbar" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
 			<ul>
-				<li><a href="#map" onclick="mapreload();" class="ui-btn-active ui-state-persist" data-icon="custom">地圖</a></li>
-				<li><a onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
-				<li><a href="#news"  onclick="news_laod()" data-icon="custom">動態時報</a></li>
-				<li><a href="#personal" onclick="getalbum()" data-icon="custom">個人檔案</a></li>
+				<li><a onclick="mapreload();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
 			</ul>
 		</div>
 	</div>
@@ -105,8 +104,8 @@
 				<hr>
 			</div>
 			<a href="#rank" style="text-decoration:none;" onclick="gorank();"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
-			<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
-			<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
+			<!-- <!-- <a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a> --> -->
+			<a style="text-decoration:none;" onclick="getfriendlist()"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 		</div>
 	  <div data-role="header" data-position="fixed">
 		  <table>   <!--改-->
@@ -134,7 +133,7 @@
 					</table>
 				</p>
 				</form>
-				<input type="text" id="postattraction" name="postattraction" value="目前所在..." style="opacity: 0.7;" onclick="$('#postattraction').val('')"/>
+				<input type="text" id="postattraction" name="postattraction" value="目前所在..." style="opacity: 0.7;" onclick="searchatt();"/>
 				<hr>
 				<table style="margin-bottom: 0;">
 					<td><button class="button button2 fa fa-check" onclick="post()"></button></td>
@@ -143,16 +142,16 @@
 			</div>
 		</div>
 	  </div>
-	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
-		<div data-iconpos="top" data-role="navbar">
-		  <ul>
-			<li><a href="#map" onclick="mapreload();" data-icon="custom">地圖</a></li>
-			<li><a onclick="capturePhotoEdit();" class="ui-btn-active ui-state-persist" data-icon="custom">拍照</a></li>
-			<li><a href="#news"  onclick="news_laod()" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" onclick="getalbum()" data-icon="custom">個人檔案</a></li>			
-		  </ul>
+	  <div class="iconbar" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
+			<ul>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
+			</ul>
 		</div>
-	  </div>
+	</div>
 	</div>
 	
 <!--動態時報-->
@@ -164,8 +163,8 @@
 			<hr>
 		</div>
 		<a href="#rank" style="text-decoration:none;" onclick="gorank();"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
-		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
-		<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
+		<!-- <a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a> -->
+		<a style="text-decoration:none;" onclick="getfriendlist()"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 	</div>
 	  <div data-role="header" data-position="fixed">
 		  <table>   <!--改-->
@@ -178,16 +177,16 @@
 		<div data-role="content" align="center" id="newblock">
 		</div>
 		<button id="loading" onclick="new_data();">載入更多貼文</button>    
-	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
-		<div data-iconpos="top" data-role="navbar">
-		  <ul>
-			<li><a href="#map" onclick="mapreload();" data-icon="custom">地圖</a></li>
-			<li><a onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
-			<li><a href="#news"  onclick="news_laod()"  class="ui-btn-active ui-state-persist" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" onclick="getalbum()" data-icon="custom">個人檔案</a></li>
-		  </ul>
+	  <div class="iconbar" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
+			<ul>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
+			</ul>
 		</div>
-	  </div>
+	</div>
 	</div>
 </div>
 <!--單張照片留言-->
@@ -199,11 +198,11 @@
 			<hr>
 		</div>
 		<a href="#rank" style="text-decoration:none;" onclick="gorank();"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
-		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
-		<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
+		<!-- <!-- <a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a> --> -->
+		<a style="text-decoration:none;" onclick="getfriendlist()"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 	</div>
 	  <div data-role="header" data-position="fixed">
-		  <table>   <!--改-->
+		  <table>
 			  <td align="center"><li onclick="$( '#myPanel_4' ).panel( 'open' );"  class="w3-hide-large fa fa-bars" style="font-size:18px;"></li></td>
 			  <td align="center"><b><h4>Crazy Bee</h4></b></td>
 			  <td align="center"><li onclick="$.mobile.changePage('#searchpage');" class="w3-hide-large fa fa-search" style="font-size:18px;"></li></td>
@@ -212,16 +211,16 @@
 	  <!--card的內容----> 
 		<div data-role="content" align="center" id="newpicblock">
 		</div>  
-	  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #4994d0 /*{a-bup-color}*/;">
-		<div data-iconpos="top" data-role="navbar">
-		  <ul>
-			<li><a href="#map" onclick="mapreload();" data-icon="custom">地圖</a></li>
-			<li><a onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
-			<li><a href="#news"  onclick="news_laod()"  class="ui-btn-active ui-state-persist" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" onclick="getalbum()" data-icon="custom">個人檔案</a></li>
-		  </ul>
+	  <div class="iconbar" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
+			<ul>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
+			</ul>
 		</div>
-	  </div>
+	</div>
 	</div>
 </div>
 <!--個人檔案-->
@@ -233,8 +232,8 @@
 			<hr>
 		</div>
 		<a href="#rank" style="text-decoration:none;" onclick="gorank();"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
-		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
-		<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
+		<!-- <a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a> -->
+		<a style="text-decoration:none;" onclick="getfriendlist()"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 	</div>
 	<div data-role="header" data-position="fixed">
 		<table>   <!--改-->
@@ -247,31 +246,32 @@
 		<table>
 			<tr>
 				<td width="25%"><img id="personpicture"  src="jquery-mobile/images/boy.png" class="img_pro" width="80px" ></td>
-				<td align="center">
+				<td align="center" rowspan="2">
 					<div><img src="jquery-mobile/images/group.png" class="icon_pro" width="40%"/><p id="fans" style="font-size:16px;">0</p></div>
 				</td>
-				<td align="center">
+				<td align="center" rowspan="2">
 					<div><img src="jquery-mobile/images/album.png" class="icon_pro" width="40%"/><p id="albumnum" style="font-size:16px;">0</p></div>
 				</td>
-				<td align="center">
-					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p id="likealbum" style="font-size:16px;">0</p></div>
+				<td align="center" rowspan="2">
+					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p id="likealbum" style="font-size:16px;">4</p></div>
 				</td>
 			</tr>
 			<tr>
 				<td><div class="proname">黃大銘</div></td>
-				<td colspan="3" align="center" width="50%"><button class="w3-btn w3-theme-d1 w3-margin-bottom followbtn">EDIT</button></td> <!--如果非自己的個人檔案就是FOLLOW-->
 			</tr>
 		</table>
 	</div> 
 
   <div class="w3-row">
 	<table>
-		<td><a href="#" onclick="openCity(event, 'Album');">
-			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Album</div>
+		<td><a onclick="openCity(event, 'Album');">
+			<div class="w3-third tablink w3-bottombar w3-hover-light-grey" align="center" style="padding: 15px;"
+>我的相簿</div>
 			</a></td>
 			
-		<td><a href="#" onclick="openCity(event, 'likeroute');">
-			<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Route</div>
+		<td><a onclick="openCity(event, 'likeroute');">
+			<div class="w3-third tablink w3-bottombar w3-hover-light-grey" align="center" style="padding: 15px;"
+>收藏路線</div>
 			</a></td>
 			
 	</table>
@@ -303,22 +303,17 @@
 			evt.currentTarget.firstElementChild.className += " w3-border-red";
 			}
 		</script>
-		<!--<script>
-		//預設顯示第一個tab
-			var _showTab = 0;
-			var $defaultLi = $('ul.tabs li').eq(_showTab).addClass('active');
-			$($defaultLi.find('a').attr('href')).siblings().hide();
-		</script>-->
-  <div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #7a7a7a /*{a-bup-color}*/;">
-    <div data-iconpos="top" data-role="navbar">
-      <ul>
-			<li><a href="#map" onclick="mapreload();" data-icon="custom">地圖</a></li>
-			<li><a onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
-			<li><a href="#news"  onclick="news_laod()" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" onclick="getalbum()" class="ui-btn-active ui-state-persist" data-icon="custom">個人檔案</a></li>
-      </ul>
-    </div>
-  </div>
+		
+  <div class="iconbar" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
+			<ul>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <!--相簿下一層(景點相簿)-->
@@ -326,8 +321,8 @@
 	<div data-role="header" data-position="fixed">
 		<table>
 			<td align="center"><i class="fa fa-chevron-left" style="font-size:24px;" align="left" onclick="goBack()"></i></td>
-			<td align="center"><b><h3 style="font-family:Microsoft JhengHei;">台南知性之旅</h3></b></td>
-			<td align="center"><li onclick="" class="w3-hide-large fa fa-search" style="font-size:24px;"></li>
+			<td align="center"><b><h3 id="album_title" style="font-family:Microsoft JhengHei;">台南知性之旅</h3></b></td>
+			<td align="center" id="savelike"><li onclick="" class="w3-hide-large fa fa-heart" style="font-size:18px;">收藏路線</li>
 		</table>
 	</div>
 	<!--景點路線-->
@@ -355,12 +350,12 @@
 		<tr>
 			<td align="center"><i class="w3-hide-large fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack()"></i></td>
 			<td align="center" width="75%"><h4 id="titlename">景點名稱</h4></td>
-			<td align="right" width="15%" id="goroute"><p id="changer" onclick="$.mobile.changePage('#attroute');" style="">路線</p></td>
+			<td align="right" width="15%" id="goroute"></td>
     	</tr>
     </table>
   </div>
   <div align="center" data-role="content">
-    <div id="div-photo"><img  src="jquery-mobile/images/gallery.png" style="width:100%;min-height:350px;max-height:600px;"></div>
+    <div id="div-photo"><img id="attimg" src="http://bee.japanwest.cloudapp.azure.com//img/162.jpg" style="width:100%;min-height:350px;max-height:600px;"></div>
     <br>
     <div id="div-info" data-theme="m" align="center">
       <table style="text-align:center;">
@@ -389,6 +384,16 @@
 		</tr>
       </table>
     </div>
+	<div class="iconbar" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
+			<ul>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
+			</ul>
+		</div>
+	</div>
   </div>
 </div>
 
@@ -411,7 +416,7 @@
 	<div style=" background-color:white; padding:10px;">
 		<table>
 			<td width="4%" align="center"><i class="fa fa-chevron-left" style="font-size:18px;" align="left" onclick="goBack( );"></i></td>
-			<td align="center"><h4><b>台北101</b></h4></td>
+			<td align="center" id="attroutetitle"><h4><b>台北101</b></h4></td>
 		</table>
 	</div>
 	<div>
@@ -479,6 +484,16 @@
 			</tr>
 		</table>
 	</div>
+	<div class="iconbar" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
+			<ul>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <!--新增景點-->
@@ -524,8 +539,8 @@
 			<hr>
 		</div>
 		<a href="#rank" style="text-decoration:none;" onclick="gorank();"><button style="background-color:#ffe6e6; bottom:0;"> 排行榜 </button></a>
-		<a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a>
-		<a href="#friends_pro" style="text-decoration:none;" onclick="friend_getalbum('3')"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
+		<!-- <a href="#addatt" style="text-decoration:none;"><button style="background-color:#ffe6e6; bottom:0;"> 新增景點 </button></a> -->
+		<a style="text-decoration:none;" onclick="getfriendlist()"><button style="background-color:#ffe6e6; bottom:0;"> 好友檔案 </button></a>
 	</div>
 	<div data-role="header" data-position="fixed">
 		<table>   <!--改-->
@@ -545,7 +560,7 @@
 					<div><img src="jquery-mobile/images/album.png" class="icon_pro" width="40%"/><p id="friend_albumnum" style="font-size:16px;">0</p></div>
 				</td>
 				<td align="center">
-					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p id="friend_likealbum" style="font-size:16px;">0</p></div>
+					<div><img src="jquery-mobile/images/route.png" class="icon_pro" width="40%"/><p id="friend_likealbum" style="font-size:16px;">4</p></div>
 				</td>
 			</tr>
 			<tr>
@@ -554,75 +569,23 @@
 			</tr>
 		</table>
 	</div>
-	<div class="w3-row">
-		<table>
-			<td><a href="#" onclick="openCity(event, 'friends_Album');">
-				<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Album</div>
-			</a></td>
-
-			<td><a href="#" onclick="openCity(event, 'friends_Route');">
-				<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">Save Route</div>
-			</a></td>
-		</table>
-	</div>
+	<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding" align="center">相簿</div>
 	<!--相簿-->
-	<div id="friends_Album" class="w3-container city"></div>
+	<div id="friends_Album" class="w3-container" ></div>
 
-	<!--朋友收藏的路線-->
-	<div id="friends_Route" class="w3-container city" align="center">
-		<div class="route">
-			<b>*高雄知性之旅*</b>
-		</div>
-
-		<div class="route">
-			<b>*台南知性之旅*</b>
-		</div>
-
-		<div class="route">
-			<b>*屏東知性之旅*</b>
-		</div>
-
-		<div class="route">
-			<b>*屏東知性之旅*</b>
-		</div>
-
-		<div class="route">
-			<b>*屏東知性之旅*</b>
-		</div>
-
-		<div class="route">
-			<b>*屏東知性之旅*</b>
-		</div>
-	</div>
-
-	<script>
-			function openCity(evt, cityName) {
-			var i, x, tablinks;
-			x = document.getElementsByClassName("city");
-			for (i = 0; i < x.length; i++) {
-				x[i].style.display = "none";
-			}
-			tablinks = document.getElementsByClassName("tablink");
-			for (i = 0; i < x.length; i++) {
-			tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
-			}
-			document.getElementById(cityName).style.display = "block";
-			evt.currentTarget.firstElementChild.className += " w3-border-red";
-			}
-	</script>
 	<!--<script>
     //預設顯示第一個tab
         var _showTab = 0;
         var $defaultLi = $('ul.tabs li').eq(_showTab).addClass('active');
         $($defaultLi.find('a').attr('href')).siblings().hide();
     </script>-->
-	<div data-id="main" data-position="fixed" data-role="footer" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color: #baeeee /*{a-bup-border}*/; color: #7a7a7a /*{a-bup-color}*/;">
-		<div data-iconpos="top" data-role="navbar">
+	<div class="iconbar" style="background-color: #baeeee /*{a-bup-background-color}*/; border-color:  #baeeee /*{a-bup-border}*/; color:  #baeeee /*{a-bup-color}*/;">
+		<div data-role="navbar">
 			<ul>
-			<li><a href="#map" onclick="mapreload();" data-icon="custom">地圖</a></li>
-			<li><a onclick="capturePhotoEdit();" data-icon="custom">拍照</a></li>
-			<li><a href="#news"  onclick="news_laod()" data-icon="custom">動態時報</a></li>
-			<li><a href="#personal" onclick="getalbum()" data-icon="custom">個人檔案</a></li>
+				<li><a onclick="mapreload();"><img src="jquery-mobile/images/planet-earth.png" width="65%" align="center"/></a></li>
+				<li><a onclick="capturePhotoEdit();"><img src="jquery-mobile/images/photo-camera-outline.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#news');news_laod();"><img src="jquery-mobile/images/newspaper.png" width="65%" align="center"/></a></li>
+				<li><a onclick="$.mobile.changePage('#personal');getalbum();" class="ui-btn-active ui-state-persist"><img src="jquery-mobile/images/profile.png" width="65%" align="center"/></a></li>
 			</ul>
 		</div>
 	</div>
@@ -642,6 +605,24 @@
 	</div>
 	<div>
 		<table id="searchtable" class="list_table">
+			
+		</table>
+	</div>
+</div>
+<!--搜尋景點頁面-->
+<div data-role="page" id="searchattpage">
+	<div data-role="header">
+		<table>   <!--改-->
+			<td width="3%" align="center"><i class="w3-hide-large fa fa-chevron-left" style="font-size:18px; padding:15px" align="left" onclick="goBack()"></i></td>
+			<td width="80%" align="center"><b><h4>搜尋景點</h4></b></td>
+		</table>
+	</div>
+	<div>
+		<form><input type="text" name="search" id="searchatt" placeholder="Search"></form>
+		<button onclick="searchatt();">查詢</button>
+	</div>
+	<div>
+		<table id="searchatttable" class="list_table">
 			
 		</table>
 	</div>

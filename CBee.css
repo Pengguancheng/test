@@ -6,8 +6,12 @@ h1,h2,h3,h4,h5 {
 	font-family: Microsoft JhengHei;
 }
 /*設定footer*/
-.iconbtn {
-	
+div.iconbar {
+	position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    border-color: #baeeee;
 }
 
 /*搜尋*/
@@ -18,7 +22,7 @@ h1,h2,h3,h4,h5 {
     border-radius: 8px;
     font-size: 16px;
     background-color: white;
-    padding: 12px 20px 12px 40px;
+    padding: 12px 20px 12px 20px;
 }
 
 .list_table {
@@ -35,14 +39,14 @@ h1,h2,h3,h4,h5 {
 .list_table tr:active{background-color:#f5f5f5}
 
 /*側拉*/
-.myPanel ul {
+#myPanel ul {
 	list-style-type: none;
     margin: 0;
     padding: 0;
 	background-color: #e6e6ff;
 }
 
-.myPanel li a {
+#myPanel li a {
 	display: block;
 	width: auto;
 	text-decoration: none;
@@ -95,7 +99,7 @@ input[type=text]:focus {
             width:100%;
             height:100%;
             position: absolute;
-            top: 9%;
+            top: 7%;
             left: -2%;
 }
 /*個人檔案頁籤*/
@@ -140,7 +144,7 @@ div.alb {
     margin: 5px;
     border: 1px solid #ccc;
     float: left;
-    width: 180px;
+    width: 100%;
 }
 
 div.alb:hover {
@@ -162,13 +166,12 @@ div.desc {
 div.route {
 	margin: 5px;
 	border: 1px solid #ccc;
-	border-radius: 5px;
 	width: 100%;
 	height: 10%;
 	padding: 15px;
     text-align: center;
 	background-color: #ffe6e6;
-	color: #6600ff;
+	color: #0099cc;
 }
 
 div.route:hover {
